@@ -227,6 +227,25 @@ class UntrustedTargetContractTests(unittest.TestCase):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, guide)
 
+    def test_runner_docs_do_not_hardcode_stale_machine_specs(self) -> None:
+        stale_claims = {
+            "references/macos-pitfalls.md": (
+                "GitHub 免费 Apple Silicon runner 当前是 **M1、3 CPU、7 GB 内存**",
+                "GitHub 免费 runner 就是 M1",
+            ),
+            "references/macos-pitfalls.en.md": (
+                "GitHub's free Apple Silicon runner is currently **M1, 3 CPU, 7 GB memory**",
+                "GitHub's free runner is M1",
+            ),
+        }
+        for relative, claims in stale_claims.items():
+            content = read_text(relative)
+            for claim in claims:
+                with self.subTest(relative=relative, claim=claim):
+                    self.assertNotIn(claim, content)
+            with self.subTest(relative=relative, topic="runner pool"):
+                self.assertIn("runner", content.lower())
+
     def test_no_non_macos_script_artifacts_exist(self) -> None:
         forbidden_suffixes = {".ps1", ".psm1", ".cmd", ".bat"}
         offenders = [

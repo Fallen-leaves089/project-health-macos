@@ -4,7 +4,7 @@
 
 This file collects macOS issues that can change project review, builds, tests, containers, delivery, or security conclusions. It is not a chip encyclopedia; the goal is to prevent false passes, false failures, and incorrect attribution on Apple Silicon.
 
-> As of **2026-11-10**, Apple's public lineup includes **M6** (Mac mini, MacBook Pro, iMac) and **M5 Ultra** (Mac Studio); the latest macOS is **macOS 27 (Golden Gate)**. GitHub's free macOS `macos-latest` runner does not guarantee a fixed chip. This repository observed **macOS 26.7.2 / Apple M2 Pro (Virtual) / arm64 / Rosetta 0**, not M6 and not Intel. Do not hard-code M1. Sources are listed at the end.
+> As of **2026-11-10**, Apple's public lineup includes **M6** (Mac mini, MacBook Pro, iMac) and **M5 Ultra** (Mac Studio); the latest macOS is **macOS 27 (Golden Gate)**. GitHub's free macOS `macos-latest` runner does not guarantee a fixed chip. This repository observed **macOS 26.7.2 / Apple M2 Pro (Virtual) / 5 logical CPUs / 14 GiB / Xcode 26.6 / arm64 / Rosetta 0**, not M6 and not Intel. Do not hard-code M1. Sources are listed at the end.
 
 ## 0. Hard gate before a formal review
 
@@ -270,6 +270,10 @@ hardware_arch: arm64
 process_arch: arm64
 rosetta_translated: 0
 chip: Apple M2 Pro (Virtual)
+cpu_count: 5
+memory_bytes: 15032385536 (14 GiB)
+Xcode: 26.6 (17F113)
+SDK: 26.5
 ```
 
 Different jobs in the same workflow may land on different machines. In this run, `macos-latest` was arm64, but it was **not M6 and not macOS 27**. Separate Intel labels such as `macos-15-intel` and `macos-26-intel` also exist. Do not hard-code specifications such as "M1, 3 CPU, 7 GB" into audit conclusions.
