@@ -4,7 +4,7 @@
 
 本文件只收录会影响项目检查、构建、测试、容器、交付或安全判断的 macOS 问题。目标不是做芯片百科，而是帮助审计者在 Apple Silicon 上避免假绿、假红和错误归因。
 
-> 截至 **2026-11-10**，Apple 官网公开的最新组合是 **M6**（Mac mini、MacBook Pro、iMac）与 **M5 Ultra**（Mac Studio）；最新 macOS 为 **macOS 27（Golden Gate）**。GitHub 免费 macOS runner 的 `macos-latest` 当前映射到 **macOS 26 arm64 / M1 / 3 CPU / 7 GB 内存**，不是 M6，也不是 Intel。来源见文末。
+> 截至 **2026-11-10**，Apple 官网公开的最新组合是 **M6**（Mac mini、MacBook Pro、iMac）与 **M5 Ultra**（Mac Studio）；最新 macOS 为 **macOS 27（Golden Gate）**。GitHub 免费 macOS runner 的 `macos-latest` 不保证固定芯片；本仓库实测为 **macOS 26.7.2 / Apple M2 Pro (Virtual) / arm64 / Rosetta 0**，不是 M6、不是 Intel，也不应写死为 M1。来源见文末。
 
 ## 0. 正式检查前的硬门禁
 
@@ -31,12 +31,12 @@ system_profiler SPHardwareDataType | grep -E 'Chip|Memory|Model Name'
 
 | 世代 | 时间与代表机型 | 审计时真正需要关注什么 |
 |---|---|---|
-| M1 / M1 Pro / Max / Ultra | 2020–2022 | 最早一批 arm64 生态；部分容器镜像、Python wheel、Node 原生模块、JDK 仍在 Rosetta 或只有 x86_64。GitHub 免费 runner 就是 M1。 |
-| M2 / M2 Pro / Max / Ultra | 2022–2023 | 仍是同一 `arm64` ABI；不要因为芯片代数变化就新增构建目标。主要差异在 GPU、媒体引擎和机型散热。 |
+| M1 / M1 Pro / Max / Ultra | 2020–2022 | 最早一批 arm64 生态；部分容器镜像、Python wheel、Node 原生模块、JDK 仍在 Rosetta 或只有 x86_64。GitHub runner 池可能分配到不同世代，不能假定固定为 M1。 |
+| M2 / M2 Pro / Max / Ultra | 2022–2023 | 仍是同一 `arm64` ABI；不要因为芯片代数变化就新增构建目标。主要差异在 GPU、媒体引擎和机型散热。2026-11-10 的 GitHub macOS 26 runner 实测报告为 M2 Pro (Virtual)。 |
 | M3 / M3 Pro / Max | 2023–2024 | 引入 3 nm 世代；系统版本和 Xcode 下限更高。GPU/Metal 与 ML 框架的可用特性可能取决于 SDK 和系统，而不是只看芯片名。M3 Ultra 于 2025 年推出，仍属 `arm64`。 |
 | M4 / M4 Pro / Max | 2024–2025 | 继续 `arm64`；统一内存和 GPU 能力提升会改变性能基线。并行测试不要沿用 M1 的固定线程数。 |
 | M5 / M5 Pro / Max / Ultra | 2025–2026 | M5 Pro/Max 于 2026-03 发布，M5 Ultra 于 2026-08 发布；高核心数容易让测试过度并行，CPU/GPU/Neural Engine 负载需要单独限流和基线。 |
-| M6 | 2026 | 2 nm、12 核 CPU/GPU、Dual 16 核 Neural Engine；随 macOS 27 发布。当前 GitHub runner 没有 M6，涉及新 GPU/Neural Engine、最新 SDK 或 macOS 27 行为时必须用真实目标机补测。 |
+| M6 | 2026 | 2 nm、12 核 CPU/GPU、Dual 16 核 Neural Engine；随 macOS 27 发布。本次实测 GitHub runner 不是 M6；涉及新 GPU/Neural Engine、最新 SDK 或 macOS 27 行为时必须用真实目标机补测。 |
 
 **关键结论：** M1 到 M6 都是 `arm64`，普通命令行、服务端和多数构建产物可以跨世代运行；不能把“芯片代数不同”误判成“二进制架构不同”。真正要分世代验证的是性能、GPU/Metal、Neural Engine、媒体编码、最新 SDK 和系统权限行为。
 
@@ -274,12 +274,22 @@ sysctl -n machdep.cpu.brand_string
 
 ## 16. GitHub macOS runner 不是“最新 Mac”
 
-GitHub 免费 Apple Silicon runner 当前是 **M1、3 CPU、7 GB 内存**，系统为 **macOS 26.7.2**；`macos-latest` 是 arm64，但**不是 M6，也不是 macOS 27**。另外还存在 `macos-15-intel`、`macos-26-intel` 等 Intel 标签。
+GitHub 免费 Apple Silicon runner 的芯片和规格会随池子变化。本仓库于 **2026-11-10** 在 `macos-latest` 实测到：
+
+```text
+macOS: 26.7.2
+hardware_arch: arm64
+process_arch: arm64
+rosetta_translated: 0
+chip: Apple M2 Pro (Virtual)
+```
+
+同一个 workflow 的不同任务也可能分配到不同机器。`macos-latest` 在本例中是 arm64，但**不是 M6，也不是 macOS 27**。另外还存在 `macos-15-intel`、`macos-26-intel` 等 Intel 标签。不要把“M1、3 CPU、7 GB”之类的规格写死进审计结论。
 
 **审计规则：**
 
 - workflow 必须固定 `runs-on: macos-latest` 或明确的 arm64 标签，并在第一步执行 `uname -m` / `arch` 硬门禁。
-- 报告写明 runner 的芯片世代、macOS 版本、Xcode 版本和内存；不要把 CI 通过写成“所有 M 系列通过”。
+- 报告写明当次日志中的芯片、CPU 数、内存、macOS、Xcode/SDK 和 Rosetta 状态；不要把 CI 通过写成“所有 M 系列通过”。
 - GPU/Metal、Neural Engine、视频编码、超大统一内存、M6 新特性和 macOS 27 专属行为，必须在对应真机补测或明确列为未覆盖。
 
 ## 17. 常见假绿清单
@@ -290,7 +300,7 @@ GitHub 免费 Apple Silicon runner 当前是 **M1、3 CPU、7 GB 内存**，系�
 - 用默认大小写不敏感 APFS 验证跨平台路径，未发现大小写冲突。
 - 用 `xattr -d` 去掉 quarantine 后判定“应用可运行”。
 - Docker 镜像能启动，就假设架构和宿主一致。
-- CI 在 M1/macOS 26 上通过，就宣称 M6/macOS 27 通过。
+- CI 在某一台 arm64 runner 上通过，就宣称所有 M 系列 Mac 或 macOS 27 都通过。
 
 ## 18. 来源
 

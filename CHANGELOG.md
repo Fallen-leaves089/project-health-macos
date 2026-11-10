@@ -10,3 +10,4 @@
 - Added package-scope checks that fail when non-macOS artifacts or commands leak back into the repository.
 - Added macOS GitHub Actions verification.
 - Added a bilingual human-trial guide with a native Apple Silicon gate, installation steps, self-check commands, and a feedback template.
+- Recorded the GitHub macOS runner as a changing Apple Silicon pool instead of hard-coding M1; the first private CI run observed macOS 26.7.2 on Apple M2 Pro (Virtual).

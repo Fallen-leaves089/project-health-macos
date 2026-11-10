@@ -18,3 +18,4 @@
 - 2026-11-10 | privacy, redaction | 扫描 macOS 主目录路径 | 只匹配 Linux `/home/`，真实 `/Users/<name>` 进入公开报告 | 增加 `/Users/<name>` 模式，同时放行 `/Users/<you>`、`/Users/Shared` 和 `/Users/Guest` | 脱敏扫描器自检及 macOS 路径正反例测试
 - 2026-11-10 | architecture, tooling | 混用 Homebrew、Python、Node、JDK 或容器 | 只看命令能启动，不检查二进制架构 | 用 `brew --prefix`、`file`、`lipo -info`、`python3 -c 'import platform; print(platform.machine())'` 和 Docker server arch 交叉确认 | GitHub macOS runner 实际执行环境探测
 - 2026-11-10 | filesystem, git | 在大小写不敏感的 APFS 卷上审查路径 | 假设只改文件名大小写一定会被 Git 和构建系统识别 | 用实际目录枚举和 `git status --short` 验证；需要时在大小写敏感卷或 Linux 上复核 | 待 macOS CI 验证测试夹具
+- 2026-11-10 | github-actions, architecture, runner | 用 GitHub 免费 macOS runner 验证原生架构 | 把 runner 规格写死为 M1 / 3 CPU / 7 GB，实测却是 Apple M2 Pro (Virtual) | 只把 `arm64` 和 Rosetta `0` 当硬条件；芯片、CPU、内存和 macOS 版本每次从日志记录，报告不得外推到所有 M 系列 | run 42794381583 的 Python 3.9/3.12 两套 Job 均输出 arm64、Rosetta 0 并 PASS

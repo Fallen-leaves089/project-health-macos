@@ -4,7 +4,7 @@
 
 This file collects macOS issues that can change project review, builds, tests, containers, delivery, or security conclusions. It is not a chip encyclopedia; the goal is to prevent false passes, false failures, and incorrect attribution on Apple Silicon.
 
-> As of **2026-11-10**, Apple's public lineup includes **M6** (Mac mini, MacBook Pro, iMac) and **M5 Ultra** (Mac Studio); the latest macOS is **macOS 27 (Golden Gate)**. GitHub's free macOS `macos-latest` runner currently maps to **macOS 26 arm64 / M1 / 3 CPU / 7 GB memory**, not M6 and not Intel. Sources are listed at the end.
+> As of **2026-11-10**, Apple's public lineup includes **M6** (Mac mini, MacBook Pro, iMac) and **M5 Ultra** (Mac Studio); the latest macOS is **macOS 27 (Golden Gate)**. GitHub's free macOS `macos-latest` runner does not guarantee a fixed chip. This repository observed **macOS 26.7.2 / Apple M2 Pro (Virtual) / arm64 / Rosetta 0**, not M6 and not Intel. Do not hard-code M1. Sources are listed at the end.
 
 ## 0. Hard gate before a formal review
 
@@ -31,12 +31,12 @@ Do not infer the chip from the macOS version, and do not infer the absence of Ro
 
 | Generation | Time and representative systems | What actually matters during a review |
 |---|---|---|
-| M1 / M1 Pro / Max / Ultra | 2020–2022 | The first arm64 ecosystem wave. Some container images, Python wheels, Node native modules, and JDKs still use Rosetta or provide x86_64 only. GitHub's free runner is M1. |
-| M2 / M2 Pro / Max / Ultra | 2022–2023 | Same `arm64` ABI. Do not invent a new build target for a chip generation; differences are mostly GPU, media engines, and chassis thermals. |
+| M1 / M1 Pro / Max / Ultra | 2020–2022 | The first arm64 ecosystem wave. Some container images, Python wheels, Node native modules, and JDKs still use Rosetta or provide x86_64 only. GitHub may allocate different generations; do not assume M1. |
+| M2 / M2 Pro / Max / Ultra | 2022–2023 | Same `arm64` ABI. Do not invent a new build target for a chip generation; differences are mostly GPU, media engines, and chassis thermals. The GitHub macOS 26 runner observed on 2026-11-10 reported M2 Pro (Virtual). |
 | M3 / M3 Pro / Max | 2023–2024 | 3 nm generation with newer OS/Xcode floors. GPU/Metal and ML feature availability may depend on SDK and OS, not only the chip name. M3 Ultra arrived in 2025 and is still `arm64`. |
 | M4 / M4 Pro / Max | 2024–2025 | Still `arm64`. Larger unified memory and GPU changes alter performance baselines; do not reuse fixed M1 thread counts. |
 | M5 / M5 Pro / Max / Ultra | 2025–2026 | M5 Pro/Max arrived in March 2026 and M5 Ultra in August 2026. High core counts can oversubscribe tests; bound CPU/GPU/Neural Engine work and record a fresh baseline. |
-| M6 | 2026 | 2 nm, 12-core CPU/GPU, Dual 16-core Neural Engine; ships with macOS 27. GitHub runners do not have M6. Test new GPU/Neural Engine, newest SDK, or macOS 27 behavior on real target hardware. |
+| M6 | 2026 | 2 nm, 12-core CPU/GPU, Dual 16-core Neural Engine; ships with macOS 27. The GitHub runner observed here was not M6. Test new GPU/Neural Engine, newest SDK, or macOS 27 behavior on real target hardware. |
 
 **Key conclusion:** M1 through M6 share the `arm64` ABI. Most CLI, server, and build outputs run across generations. "Different chip generation" is not "different binary architecture". The real reasons to test per generation are performance, GPU/Metal, Neural Engine, media encoding, newest SDKs, and OS permission behavior.
 
@@ -262,12 +262,22 @@ Bind performance conclusions to chip, memory, macOS, Xcode/SDK, workload, and co
 
 ## 16. GitHub macOS runners are not the newest Macs
 
-GitHub's free Apple Silicon runner is currently **M1, 3 CPU, 7 GB memory**, running **macOS 26.7.2**. `macos-latest` is arm64, but it is **not M6 and not macOS 27**. Separate Intel labels such as `macos-15-intel` and `macos-26-intel` also exist.
+GitHub's free Apple Silicon runner pool can change chip and hardware specifications. On **2026-11-10**, this repository observed the following on `macos-latest`:
+
+```text
+macOS: 26.7.2
+hardware_arch: arm64
+process_arch: arm64
+rosetta_translated: 0
+chip: Apple M2 Pro (Virtual)
+```
+
+Different jobs in the same workflow may land on different machines. In this run, `macos-latest` was arm64, but it was **not M6 and not macOS 27**. Separate Intel labels such as `macos-15-intel` and `macos-26-intel` also exist. Do not hard-code specifications such as "M1, 3 CPU, 7 GB" into audit conclusions.
 
 Review rules:
 
 - Use `runs-on: macos-latest` or an explicit arm64 label, then hard-gate `uname -m` and `arch` in the first step.
-- Record runner chip generation, macOS version, Xcode version, and memory. Do not turn a CI pass into "all M-series Macs pass".
+- Record the chip, CPU count, memory, macOS, Xcode/SDK, and Rosetta state from that run's log. Do not turn a CI pass into "all M-series Macs pass".
 - GPU/Metal, Neural Engine, video encoding, very large unified memory, M6-only features, and macOS 27 behavior must be tested on real target hardware or listed as uncovered.
 
 ## 17. Common false-pass checklist
@@ -278,7 +288,7 @@ Review rules:
 - Cross-platform paths were tested only on case-insensitive APFS, missing a case collision.
 - The app was declared runnable only after removing quarantine with `xattr -d`.
 - A Docker image starts, so its architecture is assumed to match the host.
-- CI passes on M1/macOS 26, then the result is presented as M6/macOS 27 coverage.
+- CI passes on one arm64 runner image/chip, then the result is presented as coverage for every M-series Mac or macOS 27.
 
 ## 18. Sources
 

@@ -6,7 +6,11 @@ uname -m
 arch
 sysctl -in sysctl.proc_translated 2>/dev/null || true
 sysctl -n machdep.cpu.brand_string 2>/dev/null || true
+sysctl -n hw.ncpu
+sysctl -n hw.memsize
 /bin/bash --version | head -n 1
+xcodebuild -version 2>/dev/null || true
+xcrun --show-sdk-version 2>/dev/null || true
 
 tmp_dir=$(mktemp -d "${TMPDIR:-/tmp}/project-health-smoke.XXXXXX")
 trap 'rm -rf "$tmp_dir"' EXIT HUP INT TERM
