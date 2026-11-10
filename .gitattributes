@@ -1,0 +1,4 @@
+* text=auto eol=lf
+*.zip binary
+.mailmap export-ignore
+CONTRIBUTORS.md export-ignore

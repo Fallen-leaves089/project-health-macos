@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
+
+# Release output and local signing material
+/project-health-macos-*.zip
+/SHA256SUMS
+/SHA256SUMS.sig
+*.key
+*.pem

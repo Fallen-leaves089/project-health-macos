@@ -1,0 +1,50 @@
+name: Verify macOS package
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: macOS Apple Silicon / Python ${{ matrix.python-version }}
+    runs-on: macos-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version:
+          - "3.9"
+          - "3.12"
+
+    env:
+      PYTHONUTF8: "1"
+      PYTHONIOENCODING: "utf-8"
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Require Apple Silicon runner
+        shell: bash
+        run: |
+          sh scripts/check_macos_env.sh
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Verify package
+        run: python scripts/verify_package.py
+
+      - name: Smoke-test macOS commands
+        run: sh scripts/smoke_macos_runtime.sh
+
+      - name: Run contract tests
+        run: python -B -m unittest discover -s tests -p "test_*.py"
