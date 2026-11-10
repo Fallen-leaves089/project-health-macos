@@ -8,7 +8,7 @@
 - Platform: macOS
 - Chips: Apple Silicon M1 and later only; Intel Macs and Rosetta terminals are rejected
 - Requirements: macOS + Git; the package verifier needs Python 3.9+
-- License: PolyForm Noncommercial License 1.0.0
+- License: Apache License 2.0
 
 ## What it does
 
@@ -28,9 +28,9 @@ It is not tied to Codex and does not require a double-click installer. Any host 
 
 ## Install
 
-### Pre-release trial package
+### Offline zip installation
 
-If you received a zip rather than a public repository, unzip it and follow [TRIAL.md](TRIAL.md) for the native `arm64` gate, installation, and self-checks. Intel Macs and Rosetta terminals are unsupported.
+If you received a zip rather than a Git clone, unzip it and follow [TRIAL.md](TRIAL.md) for the native `arm64` gate, installation, and self-checks. Intel Macs and Rosetta terminals are unsupported.
 
 Codex:
 
@@ -111,7 +111,10 @@ project-health-macos/
 ├── AGENTS.md                        # maintenance and usage boundaries
 ├── PITFALLS.md                      # macOS-specific pitfalls log
 ├── README.md / README.en.md         # documentation
-├── TRIAL.md                         # pre-release human trial and feedback guide
+├── TRIAL.md                         # human trial and feedback guide
+├── SIGNING.md / SIGNING.en.md       # release signing and download verification
+├── release-signing-key.pub          # release public key (Ed25519)
+├── allowed_signers                  # permitted release signing identity
 ├── references/
 │   ├── macos-pitfalls.md            # common and hidden traps from M1 onward
 │   ├── platform-commands.md         # macOS command reference
@@ -127,6 +130,18 @@ project-health-macos/
 
 Every Chinese reference has a matching `.en.md` English companion.
 
+## Download and signatures
+
+Download official artifacts from [GitHub Releases](https://github.com/Fallen-leaves089/project-health-macos/releases) and get `project-health-macos-<version>.zip`, `SHA256SUMS`, `SHA256SUMS.sig`, `allowed_signers`, and `release-signing-key.pub` together.
+
+Check the release public-key fingerprint first:
+
+```bash
+ssh-keygen -lf release-signing-key.pub
+```
+
+See [SIGNING.en.md](SIGNING.en.md) for complete macOS and Linux verification commands. A hash only proves that the file was not corrupted; publisher identity requires verifying `SHA256SUMS.sig`.
+
 ## Safety and privacy
 
 - Read-only by default. Obtain consent before tests, builds, dependency installs, service startup, or network access.
@@ -136,6 +151,6 @@ Every Chinese reference has a matching `.en.md` English companion.
 
 ## License and provenance
 
-This repository is a macOS-only derivative extracted from `project-health` v1.2.4 and retains the PolyForm Noncommercial License 1.0.0. Noncommercial use only by default; commercial use requires written authorization from the author. See [COMMERCIAL.en.md](COMMERCIAL.en.md).
+This repository is a macOS-only derivative extracted from `project-health` v1.2.4 and is licensed under the [Apache License 2.0](LICENSE). Personal and commercial use are permitted; redistributions must retain `LICENSE`, `NOTICE`, and the copyright notice.
 
-Copyright (c) 2026 project-health contributors. See [NOTICE](NOTICE) for provenance and attribution.
+Copyright (c) 2026 fallen-leaves <chenshuidelaye@qq.com>, GitHub: [@Fallen-leaves089](https://github.com/Fallen-leaves089). See [NOTICE](NOTICE) for provenance and attribution.

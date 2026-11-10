@@ -10,4 +10,6 @@
 - Added package-scope checks that fail when non-macOS artifacts or commands leak back into the repository.
 - Added macOS GitHub Actions verification.
 - Added a bilingual human-trial guide with a native Apple Silicon gate, installation steps, self-check commands, and a feedback template.
-- Recorded the GitHub macOS runner as a changing Apple Silicon pool instead of hard-coding M1; private CI observed macOS 26.7.2, Xcode 26.6, SDK 26.5, Apple M2 Pro (Virtual), 5 logical CPUs, and 14 GiB memory.
+- Recorded the GitHub macOS runner as a changing Apple Silicon pool instead of hard-coding M1; GitHub CI observed macOS 26.7.2, Xcode 26.6, SDK 26.5, Apple M2 Pro (Virtual), 5 logical CPUs, and 14 GiB memory.
+- Relicensed the project under Apache License 2.0 with copyright attributed to fallen-leaves (GitHub: Fallen-leaves089).
+- Added an OpenSSH Ed25519 release-signing key, allowed-signers file, and bilingual verification instructions.

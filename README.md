@@ -8,7 +8,7 @@
 - 适用平台：macOS
 - 芯片范围：仅 Apple Silicon M1 及后续世代；Intel Mac 和 Rosetta 终端不进入正式检查
 - 运行要求：macOS + Git；包校验器需要 Python 3.9+
-- 许可：PolyForm Noncommercial License 1.0.0
+- 许可：Apache License 2.0
 
 ## 它解决什么
 
@@ -28,9 +28,9 @@
 
 ## 安装
 
-### 预发布试用包
+### 离线压缩包安装
 
-如果拿到的是 zip 而不是已公开仓库，先解压，再按 [TRIAL.md](TRIAL.md) 完成原生 `arm64` 门禁、安装和自检。Intel Mac 和 Rosetta 终端不受支持。
+如果拿到的是 zip 而不是通过 Git 克隆，先解压，再按 [TRIAL.md](TRIAL.md) 完成原生 `arm64` 门禁、安装和自检。Intel Mac 和 Rosetta 终端不受支持。
 
 Codex：
 
@@ -111,7 +111,10 @@ project-health-macos/
 ├── AGENTS.md                        # 维护与使用底线
 ├── PITFALLS.md                      # macOS 专项避坑记录
 ├── README.md / README.en.md         # 使用说明
-├── TRIAL.md                         # 预发布真人试用与反馈清单
+├── TRIAL.md                         # 真人试用与反馈清单
+├── SIGNING.md / SIGNING.en.md       # 发布签名与下载校验
+├── release-signing-key.pub          # 发布公钥（Ed25519）
+├── allowed_signers                  # 允许的发布签名身份
 ├── references/
 │   ├── macos-pitfalls.md            # M1 及后续芯片的常见与隐蔽坑
 │   ├── platform-commands.md         # macOS 命令速查
@@ -127,6 +130,18 @@ project-health-macos/
 
 中英文参考文档一一对应，扩展名 `.en.md` 为英文版。
 
+## 下载与签名
+
+正式下载请从 [GitHub Releases](https://github.com/Fallen-leaves089/project-health-macos/releases) 获取，并同时下载 `project-health-macos-<version>.zip`、`SHA256SUMS`、`SHA256SUMS.sig`、`allowed_signers` 和 `release-signing-key.pub`。
+
+先核对发布公钥指纹：
+
+```bash
+ssh-keygen -lf release-signing-key.pub
+```
+
+完整的 macOS 和 Linux 校验命令见 [SIGNING.md](SIGNING.md)。哈希只能证明文件未损坏，身份验证必须同时验证 `SHA256SUMS.sig`。
+
 ## 安全与隐私
 
 - 默认只读；测试、构建、安装依赖、启动服务或联网前先取得同意。
@@ -136,6 +151,6 @@ project-health-macos/
 
 ## 许可与来源
 
-本仓库是从 `project-health` v1.2.4 拆出的 macOS 专用衍生版，保留 PolyForm Noncommercial License 1.0.0。默认仅限非商业用途；商业使用需取得作者书面授权，联系方式见 [COMMERCIAL.md](COMMERCIAL.md)。
+本仓库是从 `project-health` v1.2.4 拆出的 macOS 专用衍生版，采用 [Apache License 2.0](LICENSE)。允许个人和商业使用；再分发时保留 `LICENSE`、`NOTICE` 和版权声明。
 
-Copyright (c) 2026 project-health contributors。来源与归属见 [NOTICE](NOTICE)。
+Copyright (c) 2026 fallen-leaves <chenshuidelaye@qq.com>，GitHub：[@Fallen-leaves089](https://github.com/Fallen-leaves089)。来源与归属见 [NOTICE](NOTICE)。

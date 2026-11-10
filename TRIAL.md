@@ -1,8 +1,8 @@
 # 真人试用说明 / Human Trial Guide
 
-本包是 `project-health-macos` **1.0.0 预发布试用版**，尚未公开仓库。请只交给指定试用者，不要把试用包上传到公开仓库、包管理器或公开网盘。
+本包是 `project-health-macos` **1.0.0 公开版**，仓库地址为 <https://github.com/Fallen-leaves089/project-health-macos>。可以分享给试用者；再分发时必须保留 `LICENSE`、`NOTICE` 和原仓库归属。
 
-许可仍为 PolyForm Noncommercial License 1.0.0；商业使用需要先取得作者书面授权，见 `COMMERCIAL.md`。
+许可为 Apache License 2.0，允许个人和商业使用；再分发时保留 `LICENSE`、`NOTICE` 和版权声明。发布包使用 OpenSSH Ed25519 签名，验证见 `SIGNING.md`。
 
 ## 1. 环境硬门禁：必须是原生 Apple Silicon
 
@@ -116,7 +116,7 @@ Python 版本：
 
 ## Human trial summary (English)
 
-This is a pre-release **Apple Silicon-only** package. Formal review is supported only when `uname -m` and `arch` both return `arm64`, and `sysctl -in sysctl.proc_translated` returns `0`. Stop on Intel Macs or under Rosetta; do not disguise the environment with `arch -arm64`.
+This is the public **Apple Silicon-only** package. Formal review is supported only when `uname -m` and `arch` both return `arm64`, and `sysctl -in sysctl.proc_translated` returns `0`. Stop on Intel Macs or under Rosetta; do not disguise the environment with `arch -arm64`.
 
 Unzip the package, run `sh scripts/check_macos_env.sh`, then copy the whole directory into the host skill directory. Run the four self-checks from section 3 before testing a disposable or non-sensitive repository. The first review must be read-only until the tester explicitly approves builds, installs, services, network access, containers, or migrations.
 

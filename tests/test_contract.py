@@ -17,6 +17,7 @@ FIXTURE_DIR = ROOT / "tests" / "fixtures" / "malicious-target"
 FIXTURE = FIXTURE_DIR / "malicious-agents.fixture"
 EXPECTED_VERSION = "1.0.0"
 EXPECTED_NAME = "project-health-macos"
+EXPECTED_LICENSE = "Apache-2.0"
 
 
 def read_text(relative: str) -> str:
@@ -182,6 +183,7 @@ class UntrustedTargetContractTests(unittest.TestCase):
         for relative in ("SKILL.md", "SKILL.en.md"):
             self.assertEqual(frontmatter_field(relative, "name"), EXPECTED_NAME)
             self.assertEqual(frontmatter_version(relative), EXPECTED_VERSION)
+            self.assertEqual(frontmatter_field(relative, "license"), EXPECTED_LICENSE)
         self.assertIn(f"- 当前版本：`{EXPECTED_VERSION}`", read_text("README.md"))
         self.assertIn(f"- Version: `{EXPECTED_VERSION}`", read_text("README.en.md"))
         self.assertIn(
@@ -245,6 +247,49 @@ class UntrustedTargetContractTests(unittest.TestCase):
                     self.assertNotIn(claim, content)
             with self.subTest(relative=relative, topic="runner pool"):
                 self.assertIn("runner", content.lower())
+
+    def test_license_is_apache_and_attributed_to_owner(self) -> None:
+        license_text = read_text("LICENSE")
+        self.assertIn("Apache License", license_text)
+        self.assertIn("Version 2.0", license_text)
+
+        notice = read_text("NOTICE")
+        self.assertIn("Copyright (c) 2026 fallen-leaves", notice)
+        self.assertIn("github.com/Fallen-leaves089", notice)
+
+        for relative in (
+            "README.md",
+            "README.en.md",
+            "SKILL.md",
+            "SKILL.en.md",
+            "TRIAL.md",
+        ):
+            content = read_text(relative)
+            with self.subTest(relative=relative):
+                self.assertNotIn("PolyForm", content)
+                self.assertNotIn("Noncommercial", content)
+
+        self.assertFalse((ROOT / "COMMERCIAL.md").exists())
+        self.assertFalse((ROOT / "COMMERCIAL.en.md").exists())
+
+    def test_release_signing_material_is_consistent(self) -> None:
+        public_key = read_text("release-signing-key.pub").strip()
+        allowed_signers = read_text("allowed_signers").strip()
+        self.assertEqual(
+            allowed_signers,
+            "project-health-macos-release " + public_key,
+        )
+
+        signing = read_text("SIGNING.md")
+        self.assertIn("project-health-macos-release", signing)
+        self.assertIn("SHA256:DBDrYR50w0G+UuqtNAIgKZsXX4AjZAh3nvv0/zMCN8M", signing)
+
+        private_marker = b"OPENSSH " + b"PRIVATE KEY"
+        for path in ROOT.rglob("*"):
+            if not path.is_file():
+                continue
+            with self.subTest(path=path.relative_to(ROOT).as_posix()):
+                self.assertNotIn(private_marker, path.read_bytes())
 
     def test_no_non_macos_script_artifacts_exist(self) -> None:
         forbidden_suffixes = {".ps1", ".psm1", ".cmd", ".bat"}

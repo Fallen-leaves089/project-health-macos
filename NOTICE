@@ -1,11 +1,10 @@
 project-health-macos
-Copyright (c) 2026 project-health contributors
+Copyright (c) 2026 fallen-leaves <chenshuidelaye@qq.com>
+GitHub: https://github.com/Fallen-leaves089
 
-Required Notice: Copyright (c) 2026 project-health contributors
-
-This package is licensed under the PolyForm Noncommercial License 1.0.0.
+Licensed under the Apache License, Version 2.0.
 See LICENSE for the full terms, or:
-https://polyformproject.org/licenses/noncommercial/1.0.0
+https://www.apache.org/licenses/LICENSE-2.0
 
 macOS edition derived from project-health v1.2.4:
 https://github.com/Fallen-leaves089/project-health

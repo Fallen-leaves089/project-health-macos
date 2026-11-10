@@ -3,14 +3,14 @@ name: project-health-macos
 description: Deep project audits and delivery acceptance for native Apple Silicon Macs (M1 and later): history-first review, standards/spec two-axis audit, real build/migration/container regressions, and an evidence-linked P0-P3 report. Use only on arm64 macOS without Rosetta translation; route everyday quick checks to project-health-lite first.
 metadata:
   version: 1.0.0
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 ---
 
 # macOS Project Health Check
 
 [中文](SKILL.md) | [English](SKILL.en.md)
 
-> **License**: PolyForm Noncommercial License 1.0.0. Noncommercial use only by default; commercial use requires a written license from the author. Contact `chenshuidelaye@qq.com` to discuss terms. See [COMMERCIAL.en.md](COMMERCIAL.en.md).
+> **License**: Apache License 2.0. Personal and commercial use are permitted; redistributions must retain [LICENSE](LICENSE), [NOTICE](NOTICE), and the copyright notice. Release artifacts are signed with OpenSSH Ed25519; see [SIGNING.en.md](SIGNING.en.md).
 
 > This is the English mirror. The default `SKILL.md` is Chinese; to use this version, copy it over `SKILL.md` in your skill directory.
 

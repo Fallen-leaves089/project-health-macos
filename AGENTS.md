@@ -44,7 +44,7 @@
 
 - 本仓库是 `project-health-macos`，只面向 Apple Silicon；覆盖 M1 及后续世代。Intel Mac 和 Rosetta 终端不进入正式检查。
 - 不得把非 macOS 专用命令、脚本入口和对应避坑文档混回本仓库；CI 和包校验器会将其视为失败。
-- 许可是 PolyForm Noncommercial 1.0.0；不要改成可商用，或混入 lite 的 Apache-2.0 文案。衍生版必须保留上游归属和 NOTICE。
+- 许可是 Apache-2.0；不要重新加入非商业限制。衍生版必须保留 Copyright、`LICENSE`、`NOTICE` 和上游归属。
 - `fullstack-health-check` 是旧仓库名的重定向，不是第三个独立项目。
 
 ## English summary

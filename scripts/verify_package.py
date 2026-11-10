@@ -81,9 +81,11 @@ REQUIRED_FILES = [
     "TRIAL.md",
     "LICENSE",
     "LICENSE.zh-CN.md",
-    "COMMERCIAL.md",
-    "COMMERCIAL.en.md",
     "NOTICE",
+    "SIGNING.md",
+    "SIGNING.en.md",
+    "allowed_signers",
+    "release-signing-key.pub",
     "SECURITY.md",
     "CHANGELOG.md",
     ".gitattributes",
@@ -204,7 +206,7 @@ def _check_language_links(root: Path) -> List[str]:
 def _check_frontmatter(root: Path) -> List[str]:
     failures: List[str] = []
     expected_name = "project-health-macos"
-    expected_license = "PolyForm-Noncommercial-1.0.0"
+    expected_license = "Apache-2.0"
     versions: Dict[str, str] = {}
 
     for relative in ("SKILL.md", "SKILL.en.md"):
@@ -231,6 +233,17 @@ def _check_frontmatter(root: Path) -> List[str]:
         failures.append("SKILL.md and SKILL.en.md versions do not match: " + ", ".join(
             f"{name}={version}" for name, version in sorted(versions.items())
         ))
+
+    license_text = _read_text(root / "LICENSE")
+    if "Apache License" not in license_text or "Version 2.0" not in license_text:
+        failures.append("LICENSE does not contain the Apache License 2.0 text")
+
+    public_key = _read_text(root / "release-signing-key.pub").strip()
+    allowed_signers = _read_text(root / "allowed_signers").strip()
+    if not allowed_signers.startswith("project-health-macos-release "):
+        failures.append("allowed_signers has an unexpected signing principal")
+    if public_key not in allowed_signers:
+        failures.append("allowed_signers does not match release-signing-key.pub")
 
     return failures
 
