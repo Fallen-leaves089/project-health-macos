@@ -130,6 +130,7 @@ project-health-macos/
 ├── PITFALLS.md                      # macOS-specific pitfalls log
 ├── README.md / README.en.md         # documentation
 ├── TRIAL.md                         # human trial and feedback guide
+├── BRANCHING.md                     # branch, PR, and release policy
 ├── PROVENANCE.md / PROVENANCE.en.md # upstream license provenance and relicensing
 ├── SIGNING.md / SIGNING.en.md       # release signing and download verification
 ├── release-signing-key.pub          # release public key (Ed25519)
@@ -160,6 +161,10 @@ ssh-keygen -lf release-signing-key.pub
 ```
 
 See [SIGNING.en.md](SIGNING.en.md) for complete macOS and Linux verification commands. A hash only proves that the file was not corrupted; publisher identity requires verifying `SHA256SUMS.sig`.
+
+## Branches and releases
+
+The repository uses a protected `main` trunk. See [BRANCHING.md](BRANCHING.md) for branch names, PR gates, squash merging, and release rules.
 
 ## Safety and privacy
 

@@ -130,6 +130,7 @@ project-health-macos/
 ├── PITFALLS.md                      # macOS 专项避坑记录
 ├── README.md / README.en.md         # 使用说明
 ├── TRIAL.md                         # 真人试用与反馈清单
+├── BRANCHING.md                     # 分支、PR 与发布约定
 ├── PROVENANCE.md / PROVENANCE.en.md # 上游许可证来源与再授权说明
 ├── SIGNING.md / SIGNING.en.md       # 发布签名与下载校验
 ├── release-signing-key.pub          # 发布公钥（Ed25519）
@@ -160,6 +161,10 @@ ssh-keygen -lf release-signing-key.pub
 ```
 
 完整的 macOS 和 Linux 校验命令见 [SIGNING.md](SIGNING.md)。哈希只能证明文件未损坏，身份验证必须同时验证 `SHA256SUMS.sig`。
+
+## 分支与发布
+
+仓库采用受保护的 `main` 单主干维护；短分支命名、PR 门禁、squash 合并和发布约定见 [BRANCHING.md](BRANCHING.md)。
 
 ## 安全与隐私
 

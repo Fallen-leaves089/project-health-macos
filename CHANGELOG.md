@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Documented the single-trunk branch policy and added a pull-request checklist.
+
 ## 1.0.1 - 2026-11-11
 
 - Documented the upstream `project-health` v1.2.4 PolyForm Noncommercial provenance and the maintainer's Apache-2.0 relicensing in `PROVENANCE.md` and `PROVENANCE.en.md`.
