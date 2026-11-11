@@ -4,7 +4,7 @@
 
 本文件只收录会影响项目检查、构建、测试、容器、交付或安全判断的 macOS 问题。目标不是做芯片百科，而是帮助审计者在 Apple Silicon 上避免假绿、假红和错误归因。
 
-> 截至 **2026-11-11**，Apple 官网公开的最新组合是 **M6**（Mac mini、MacBook Pro、iMac）与 **M5 Ultra**（Mac Studio）；最新 macOS 为 **macOS 27（Golden Gate）**。这些是 Apple 官方资料覆盖的机型与系统，不等于本仓库已经逐台实机验证。GitHub 免费 macOS runner 的 `macos-latest` 不保证固定芯片；本仓库 CI 实测为 **macOS 26.7.2 / Apple M2 Pro (Virtual) / 5 逻辑 CPU / 14 GiB / Xcode 26.6 / arm64 / Rosetta 0**，不是 M6、不是 Intel，也不应写死为 M1。本文把“架构支持范围”“官方资料覆盖”“本仓库实机验证”分开记录，来源见文末。
+> 截至 **2026-11-11**，Apple 官网公开的最新组合是 **M6**（Mac mini、MacBook Pro、iMac）与 **M5 Ultra**（Mac Studio）；最新 macOS 为 **macOS 27（Golden Gate）**。这些是 Apple 官方资料覆盖的机型与系统，不等于本仓库已经逐台实机验证。GitHub 免费 macOS runner 的 `macos-latest` 不保证固定芯片；本仓库 CI 在 macOS 26.7.2 上先后观察到 **Apple M2 Pro (Virtual)** 和 **Apple M1 (Virtual)**，均为 arm64 / Rosetta 0，既不是 M6，也不是 Intel，也不应写死为某一代。本文把“架构支持范围”“官方资料覆盖”“本仓库实机验证”分开记录，来源见文末。
 
 ## 0. 正式检查前的硬门禁
 
@@ -288,7 +288,7 @@ Xcode: 26.6 (17F113)
 SDK: 26.5
 ```
 
-同一个 workflow 的不同任务也可能分配到不同机器。`macos-latest` 在本例中是 arm64，但**不是 M6，也不是 macOS 27**。另外还存在 `macos-15-intel`、`macos-26-intel` 等 Intel 标签。不要把“M1、3 CPU、7 GB”之类的规格写死进审计结论。
+同一个 workflow 的不同任务也可能分配到不同机器。2026-11-10 观察到 Apple M2 Pro (Virtual)，2026-11-11 又观察到 Apple M1 (Virtual)；两次均为 macOS 26.7.2 / arm64，但**都不是 M6，也不是 macOS 27**。另外还存在 `macos-15-intel`、`macos-26-intel` 等 Intel 标签。不要把“M1、3 CPU、7 GB”之类的规格写死进审计结论。
 
 **审计规则：**
 

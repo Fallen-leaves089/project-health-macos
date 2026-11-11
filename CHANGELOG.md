@@ -4,7 +4,7 @@
 
 - Documented the upstream `project-health` v1.2.4 PolyForm Noncommercial provenance and the maintainer's Apache-2.0 relicensing in `PROVENANCE.md` and `PROVENANCE.en.md`.
 - Preserved the upstream Required Notice and added package-verifier and contract-test checks for the provenance chain.
-- Clarified that M1-M6 `arm64` compatibility is a platform fact, while CI hardware validation remains limited to the observed Apple M2 Pro (Virtual) runner.
+- Clarified that M1-M6 `arm64` compatibility is a platform fact, while CI hardware validation remains limited to the observed runner pool (Apple M2 Pro and M1 virtual runners, both macOS 26.7.2).
 - Added an APFS case-behavior probe to the macOS smoke test and recorded the remaining case-sensitive-volume limitation.
 - Fixed the trial feedback count, added upgrade guidance, and documented how to restore the entry file after switching languages.
 

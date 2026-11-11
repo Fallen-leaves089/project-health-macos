@@ -7,7 +7,7 @@
 - 当前版本：`1.0.1`
 - 适用平台：macOS
 - 芯片范围：仅 Apple Silicon M1 及后续世代；Intel Mac 和 Rosetta 终端不进入正式检查
-- 验证范围：CI 实测为 macOS 26.7.2 / Apple M2 Pro (Virtual)；M1–M6 的 `arm64` 架构兼容性按平台事实覆盖，M6、M5 Ultra 和 macOS 27 不作为已实机验证范围
+- 验证范围：CI 已观察到 macOS 26.7.2 上的 Apple M2 Pro (Virtual) 和 Apple M1 (Virtual) 两种 runner；M1–M6 的 `arm64` 架构兼容性按平台事实覆盖，M6、M5 Ultra 和 macOS 27 不作为已实机验证范围
 - 运行要求：macOS + Git；包校验器需要 Python 3.9+
 - 许可：Apache License 2.0
 

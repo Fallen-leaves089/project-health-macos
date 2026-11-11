@@ -7,7 +7,7 @@
 - Version: `1.0.1`
 - Platform: macOS
 - Chips: Apple Silicon M1 and later only; Intel Macs and Rosetta terminals are rejected
-- Validation scope: CI observed macOS 26.7.2 on an Apple M2 Pro (Virtual); M1-M6 `arm64` architecture compatibility is covered as platform fact, while M6, M5 Ultra, and macOS 27 are not presented as hardware-validated
+- Validation scope: CI observed both Apple M2 Pro (Virtual) and Apple M1 (Virtual) runners on macOS 26.7.2; M1-M6 `arm64` architecture compatibility is covered as platform fact, while M6, M5 Ultra, and macOS 27 are not presented as hardware-validated
 - Requirements: macOS + Git; the package verifier needs Python 3.9+
 - License: Apache License 2.0
 
