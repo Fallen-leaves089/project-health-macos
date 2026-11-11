@@ -21,6 +21,14 @@ test "$(cat "$tmp_dir/sample.txt")" = "new-value"
 
 stat -f '%Sp %Su:%Sg %N' "$tmp_dir/sample.txt" >/dev/null
 shasum -a 256 "$tmp_dir/sample.txt" >/dev/null
+
+printf 'case-probe\n' > "$tmp_dir/CaseProbe"
+if [ -e "$tmp_dir/caseprobe" ]; then
+  printf 'apfs_case_insensitive: yes\n'
+else
+  printf 'apfs_case_insensitive: no\n'
+fi
+
 command -v lsof >/dev/null
 command -v xattr >/dev/null
 command -v codesign >/dev/null

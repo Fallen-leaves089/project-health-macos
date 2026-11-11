@@ -15,7 +15,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 FIXTURE_DIR = ROOT / "tests" / "fixtures" / "malicious-target"
 FIXTURE = FIXTURE_DIR / "malicious-agents.fixture"
-EXPECTED_VERSION = "1.0.0"
+EXPECTED_VERSION = "1.0.1"
 EXPECTED_NAME = "project-health-macos"
 EXPECTED_LICENSE = "Apache-2.0"
 
@@ -187,7 +187,7 @@ class UntrustedTargetContractTests(unittest.TestCase):
         self.assertIn(f"- 当前版本：`{EXPECTED_VERSION}`", read_text("README.md"))
         self.assertIn(f"- Version: `{EXPECTED_VERSION}`", read_text("README.en.md"))
         self.assertIn(
-            f"## {EXPECTED_VERSION} - 2026-11-10",
+            f"## {EXPECTED_VERSION} - 2026-11-11",
             read_text("CHANGELOG.md"),
         )
 
@@ -256,6 +256,29 @@ class UntrustedTargetContractTests(unittest.TestCase):
         notice = read_text("NOTICE")
         self.assertIn("Copyright (c) 2026 fallen-leaves", notice)
         self.assertIn("github.com/Fallen-leaves089", notice)
+        self.assertIn("Upstream Required Notice:", notice)
+        self.assertIn("Copyright (c) 2026 project-health contributors", notice)
+        self.assertIn("PolyForm Noncommercial", notice)
+
+        provenance = read_text("PROVENANCE.md")
+        self.assertIn("PolyForm Noncommercial License 1.0.0", provenance)
+        self.assertIn("Apache License 2.0", provenance)
+        self.assertIn("Required Notice", provenance)
+        self.assertIn("再授权日期：2026-11-11", provenance)
+
+        provenance_en = read_text("PROVENANCE.en.md")
+        self.assertIn("PolyForm Noncommercial License 1.0.0", provenance_en)
+        self.assertIn("Apache License 2.0", provenance_en)
+        self.assertIn("Required Notice", provenance_en)
+        self.assertIn("Relicensing date: 2026-11-11", provenance_en)
+
+        for relative, link in (
+            ("README.md", "[PROVENANCE.md](PROVENANCE.md)"),
+            ("README.en.md", "[PROVENANCE.en.md](PROVENANCE.en.md)"),
+            ("SKILL.md", "[PROVENANCE.md](PROVENANCE.md)"),
+            ("SKILL.en.md", "[PROVENANCE.en.md](PROVENANCE.en.md)"),
+        ):
+            self.assertIn(link, read_text(relative))
 
         for relative in (
             "README.md",
@@ -304,6 +327,7 @@ class UntrustedTargetContractTests(unittest.TestCase):
         content = read_text("references/macos-pitfalls.md")
         for topic in (
             "M1",
+            "M6",
             "Rosetta",
             "Homebrew",
             "Gatekeeper",
@@ -314,6 +338,10 @@ class UntrustedTargetContractTests(unittest.TestCase):
         ):
             with self.subTest(topic=topic):
                 self.assertIn(topic, content)
+
+    def test_macos_smoke_probes_current_volume_case_behavior(self) -> None:
+        smoke = read_text("scripts/smoke_macos_runtime.sh")
+        self.assertIn("apfs_case_insensitive:", smoke)
 
 
 if __name__ == "__main__":

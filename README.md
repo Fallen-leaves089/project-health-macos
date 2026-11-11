@@ -4,9 +4,10 @@
 
 **macOS 专用的深度项目体检 Skill。** 从 [project-health](https://github.com/Fallen-leaves089/project-health) 的专业版工作流拆出，只保留 macOS 环境需要的命令、架构差异、权限边界和高隐蔽度陷阱。
 
-- 当前版本：`1.0.0`
+- 当前版本：`1.0.1`
 - 适用平台：macOS
 - 芯片范围：仅 Apple Silicon M1 及后续世代；Intel Mac 和 Rosetta 终端不进入正式检查
+- 验证范围：CI 实测为 macOS 26.7.2 / Apple M2 Pro (Virtual)；M1–M6 的 `arm64` 架构兼容性按平台事实覆盖，M6、M5 Ultra 和 macOS 27 不作为已实机验证范围
 - 运行要求：macOS + Git；包校验器需要 Python 3.9+
 - 许可：Apache License 2.0
 
@@ -40,6 +41,14 @@ git clone https://github.com/Fallen-leaves089/project-health-macos.git \
 test -f "$HOME/.codex/skills/project-health-macos/SKILL.md"
 ```
 
+已经安装过时不要重复 `git clone`，在安装目录执行：
+
+```bash
+git -C "$HOME/.codex/skills/project-health-macos" pull --ff-only
+```
+
+如果之前切换过英文入口，先用备份或 `git -C "$HOME/.codex/skills/project-health-macos" restore SKILL.md` 恢复中文入口，再更新。
+
 Claude Code：
 
 ```bash
@@ -50,7 +59,7 @@ test -f "$HOME/.claude/skills/project-health-macos/SKILL.md"
 
 其他 Agent Skills 宿主：把仓库克隆到宿主配置的技能目录，目录名建议保持 `project-health-macos`。
 
-安装时必须带上整个目录；不要只复制 `SKILL.md`。`AGENTS.md`、`PITFALLS.md`、`references/`、`scripts/` 和 `tests/` 都是包的一部分。
+安装时必须带上整个目录；不要只复制 `SKILL.md`。`AGENTS.md`、`PITFALLS.md`、`PROVENANCE.md`、`references/`、`scripts/` 和 `tests/` 都是包的一部分。
 
 安装后先确认运行环境：
 
@@ -63,8 +72,17 @@ sh scripts/check_macos_env.sh
 默认加载中文 `SKILL.md`。需要英文版时，在安装目录执行：
 
 ```bash
+cp SKILL.md SKILL.zh.md.bak
 cp SKILL.en.md SKILL.md
 ```
+
+恢复中文入口：
+
+```bash
+mv SKILL.zh.md.bak SKILL.md
+```
+
+这会临时修改安装目录中的入口文件；升级前先恢复，避免本地改动阻塞 `git pull`。
 
 ## 怎么用
 
@@ -112,6 +130,7 @@ project-health-macos/
 ├── PITFALLS.md                      # macOS 专项避坑记录
 ├── README.md / README.en.md         # 使用说明
 ├── TRIAL.md                         # 真人试用与反馈清单
+├── PROVENANCE.md / PROVENANCE.en.md # 上游许可证来源与再授权说明
 ├── SIGNING.md / SIGNING.en.md       # 发布签名与下载校验
 ├── release-signing-key.pub          # 发布公钥（Ed25519）
 ├── allowed_signers                  # 允许的发布签名身份
@@ -151,6 +170,6 @@ ssh-keygen -lf release-signing-key.pub
 
 ## 许可与来源
 
-本仓库是从 `project-health` v1.2.4 拆出的 macOS 专用衍生版，采用 [Apache License 2.0](LICENSE)。允许个人和商业使用；再分发时保留 `LICENSE`、`NOTICE` 和版权声明。
+本仓库是从 `project-health` v1.2.4 拆出的 macOS 专用衍生版，采用 [Apache License 2.0](LICENSE)。允许个人和商业使用；再分发时保留 `LICENSE`、`NOTICE`、`PROVENANCE.md` 和上游 Required Notice。
 
-Copyright (c) 2026 fallen-leaves <chenshuidelaye@qq.com>，GitHub：[@Fallen-leaves089](https://github.com/Fallen-leaves089)。来源与归属见 [NOTICE](NOTICE)。
+Copyright (c) 2026 fallen-leaves <chenshuidelaye@qq.com>，GitHub：[@Fallen-leaves089](https://github.com/Fallen-leaves089)。来源、原始许可证和再授权范围见 [PROVENANCE.md](PROVENANCE.md)，归属摘要见 [NOTICE](NOTICE)。

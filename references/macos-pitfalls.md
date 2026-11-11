@@ -4,7 +4,7 @@
 
 本文件只收录会影响项目检查、构建、测试、容器、交付或安全判断的 macOS 问题。目标不是做芯片百科，而是帮助审计者在 Apple Silicon 上避免假绿、假红和错误归因。
 
-> 截至 **2026-11-10**，Apple 官网公开的最新组合是 **M6**（Mac mini、MacBook Pro、iMac）与 **M5 Ultra**（Mac Studio）；最新 macOS 为 **macOS 27（Golden Gate）**。GitHub 免费 macOS runner 的 `macos-latest` 不保证固定芯片；本仓库实测为 **macOS 26.7.2 / Apple M2 Pro (Virtual) / 5 逻辑 CPU / 14 GiB / Xcode 26.6 / arm64 / Rosetta 0**，不是 M6、不是 Intel，也不应写死为 M1。来源见文末。
+> 截至 **2026-11-11**，Apple 官网公开的最新组合是 **M6**（Mac mini、MacBook Pro、iMac）与 **M5 Ultra**（Mac Studio）；最新 macOS 为 **macOS 27（Golden Gate）**。这些是 Apple 官方资料覆盖的机型与系统，不等于本仓库已经逐台实机验证。GitHub 免费 macOS runner 的 `macos-latest` 不保证固定芯片；本仓库 CI 实测为 **macOS 26.7.2 / Apple M2 Pro (Virtual) / 5 逻辑 CPU / 14 GiB / Xcode 26.6 / arm64 / Rosetta 0**，不是 M6、不是 Intel，也不应写死为 M1。本文把“架构支持范围”“官方资料覆盖”“本仓库实机验证”分开记录，来源见文末。
 
 ## 0. 正式检查前的硬门禁
 

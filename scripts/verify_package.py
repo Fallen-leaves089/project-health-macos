@@ -6,6 +6,7 @@ Checks:
   * text files are UTF-8 without BOM
   * relative Markdown links resolve
   * both SKILL frontmatters share the expected name, version, and license
+  * upstream license provenance and the Required Notice are preserved
   * language links are present in the README and SKILL files
   * non-macOS trap files and commands have not leaked into the package
   * the redaction scanner passes its self-test and a package scan
@@ -82,6 +83,8 @@ REQUIRED_FILES = [
     "LICENSE",
     "LICENSE.zh-CN.md",
     "NOTICE",
+    "PROVENANCE.md",
+    "PROVENANCE.en.md",
     "SIGNING.md",
     "SIGNING.en.md",
     "allowed_signers",
@@ -248,6 +251,45 @@ def _check_frontmatter(root: Path) -> List[str]:
     return failures
 
 
+def _check_provenance(root: Path) -> List[str]:
+    failures: List[str] = []
+    notice = _read_text(root / "NOTICE")
+    for phrase in (
+        "Upstream Required Notice:",
+        "Copyright (c) 2026 project-health contributors",
+        "PolyForm Noncommercial",
+        "PROVENANCE.md",
+    ):
+        if phrase not in notice:
+            failures.append(f"NOTICE is missing provenance phrase: {phrase}")
+
+    expected = {
+        "PROVENANCE.md": (
+            "PolyForm Noncommercial License 1.0.0",
+            "Apache License 2.0",
+            "Required Notice",
+            "再授权日期：2026-11-11",
+        ),
+        "PROVENANCE.en.md": (
+            "PolyForm Noncommercial License 1.0.0",
+            "Apache License 2.0",
+            "Required Notice",
+            "Relicensing date: 2026-11-11",
+        ),
+        "README.md": ("[PROVENANCE.md](PROVENANCE.md)",),
+        "README.en.md": ("[PROVENANCE.en.md](PROVENANCE.en.md)",),
+        "SKILL.md": ("[PROVENANCE.md](PROVENANCE.md)",),
+        "SKILL.en.md": ("[PROVENANCE.en.md](PROVENANCE.en.md)",),
+    }
+    for relative, phrases in expected.items():
+        content = _read_text(root / relative)
+        for phrase in phrases:
+            if phrase not in content:
+                failures.append(f"{relative} is missing provenance phrase: {phrase}")
+
+    return failures
+
+
 def _check_macos_scope(root: Path) -> List[str]:
     failures: List[str] = []
     forbidden_suffixes = {".ps1", ".psm1", ".cmd", ".bat"}
@@ -362,6 +404,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     link_failures, markdown_count = _check_links(root)
     failures.extend(link_failures)
     failures.extend(_check_frontmatter(root))
+    failures.extend(_check_provenance(root))
     failures.extend(_check_language_links(root))
     failures.extend(_check_macos_scope(root))
 

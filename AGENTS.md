@@ -44,7 +44,7 @@
 
 - 本仓库是 `project-health-macos`，只面向 Apple Silicon；覆盖 M1 及后续世代。Intel Mac 和 Rosetta 终端不进入正式检查。
 - 不得把非 macOS 专用命令、脚本入口和对应避坑文档混回本仓库；CI 和包校验器会将其视为失败。
-- 许可是 Apache-2.0；不要重新加入非商业限制。衍生版必须保留 Copyright、`LICENSE`、`NOTICE` 和上游归属。
+- 许可是 Apache-2.0；不要重新加入非商业限制。衍生版必须保留 Copyright、`LICENSE`、`NOTICE`、`PROVENANCE.md`、上游 Required Notice 和上游归属；修改授权链时同步更新 `PROVENANCE.en.md`、校验器和契约测试。
 - `fullstack-health-check` 是旧仓库名的重定向，不是第三个独立项目。
 
 ## English summary

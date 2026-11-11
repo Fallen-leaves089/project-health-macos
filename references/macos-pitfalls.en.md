@@ -4,7 +4,7 @@
 
 This file collects macOS issues that can change project review, builds, tests, containers, delivery, or security conclusions. It is not a chip encyclopedia; the goal is to prevent false passes, false failures, and incorrect attribution on Apple Silicon.
 
-> As of **2026-11-10**, Apple's public lineup includes **M6** (Mac mini, MacBook Pro, iMac) and **M5 Ultra** (Mac Studio); the latest macOS is **macOS 27 (Golden Gate)**. GitHub's free macOS `macos-latest` runner does not guarantee a fixed chip. This repository observed **macOS 26.7.2 / Apple M2 Pro (Virtual) / 5 logical CPUs / 14 GiB / Xcode 26.6 / arm64 / Rosetta 0**, not M6 and not Intel. Do not hard-code M1. Sources are listed at the end.
+> As of **2026-11-11**, Apple's public lineup includes **M6** (Mac mini, MacBook Pro, iMac) and **M5 Ultra** (Mac Studio); the latest macOS is **macOS 27 (Golden Gate)**. These are models and systems covered by Apple's published material, not hardware individually verified by this repository. GitHub's free macOS `macos-latest` runner does not guarantee a fixed chip. This repository's CI observed **macOS 26.7.2 / Apple M2 Pro (Virtual) / 5 logical CPUs / 14 GiB / Xcode 26.6 / arm64 / Rosetta 0**, not M6 and not Intel. Do not hard-code M1. This document keeps architecture support, Apple's published coverage, and this repository's observed hardware separate. Sources are listed at the end.
 
 ## 0. Hard gate before a formal review
 

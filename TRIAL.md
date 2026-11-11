@@ -1,8 +1,8 @@
 # 真人试用说明 / Human Trial Guide
 
-本包是 `project-health-macos` **1.0.0 公开版**，仓库地址为 <https://github.com/Fallen-leaves089/project-health-macos>。可以分享给试用者；再分发时必须保留 `LICENSE`、`NOTICE` 和原仓库归属。
+本包是 `project-health-macos` **1.0.1 公开版**，仓库地址为 <https://github.com/Fallen-leaves089/project-health-macos>。可以分享给试用者；再分发时必须保留 `LICENSE`、`NOTICE`、`PROVENANCE.md` 和原仓库归属。
 
-许可为 Apache License 2.0，允许个人和商业使用；再分发时保留 `LICENSE`、`NOTICE` 和版权声明。发布包使用 OpenSSH Ed25519 签名，验证见 `SIGNING.md`。
+许可为 Apache License 2.0，允许个人和商业使用；再分发时保留 `LICENSE`、`NOTICE`、`PROVENANCE.md` 和上游 Required Notice。发布包使用 OpenSSH Ed25519 签名，验证见 `SIGNING.md`。
 
 ## 1. 环境硬门禁：必须是原生 Apple Silicon
 
@@ -96,7 +96,7 @@ uname -m / arch / rosetta_translated：
 宿主与版本：Codex / Claude Code / 其他
 Python 版本：
 安装路径：
-三项自检结果：
+四项自检结果：
 被测项目类型与大致规模：
 实际耗时：
 误报（附 file:line 和原因）：

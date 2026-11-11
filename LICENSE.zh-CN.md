@@ -2,7 +2,7 @@
 
 [中文](LICENSE.zh-CN.md) | [English original](LICENSE)
 
-本作品采用 **Apache License 2.0**。英文原文见 `LICENSE`，具有最终效力；本文件只是便于中文读者理解的说明，不是官方译本，也不构成法律意见。
+本作品采用 **Apache License 2.0**。英文原文见 `LICENSE`，具有最终效力；本文件只是便于中文读者理解的说明，不是官方译本，也不构成法律意见。上游来源、原始许可证和再授权范围见 `PROVENANCE.md`。
 
 Copyright (c) 2026 fallen-leaves <chenshuidelaye@qq.com>
 GitHub: <https://github.com/Fallen-leaves089>
