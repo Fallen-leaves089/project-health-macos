@@ -265,12 +265,14 @@ class UntrustedTargetContractTests(unittest.TestCase):
         self.assertIn("Apache License 2.0", provenance)
         self.assertIn("Required Notice", provenance)
         self.assertIn("再授权日期：2026-11-11", provenance)
+        self.assertIn("独立创作", provenance)
 
         provenance_en = read_text("PROVENANCE.en.md")
         self.assertIn("PolyForm Noncommercial License 1.0.0", provenance_en)
         self.assertIn("Apache License 2.0", provenance_en)
         self.assertIn("Required Notice", provenance_en)
         self.assertIn("Relicensing date: 2026-11-11", provenance_en)
+        self.assertIn("no other human authors", provenance_en)
 
         for relative, link in (
             ("README.md", "[PROVENANCE.md](PROVENANCE.md)"),

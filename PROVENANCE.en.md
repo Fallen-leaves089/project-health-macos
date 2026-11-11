@@ -19,7 +19,8 @@ This file records the licensing relationship between `project-health-macos` and 
 - Publisher: fallen-leaves <chenshuidelaye@qq.com> (GitHub: <https://github.com/Fallen-leaves089>)
 - Current license: Apache License 2.0
 - Relicensing date: 2026-11-11
-- Statement: This macOS edition was prepared by the upstream maintainer, fallen-leaves, and is published by the same maintainer under the Apache License 2.0. The upstream public contributor history listed only `Fallen-leaves089` at the time of relicensing. If you believe you hold rights in unattributed material, please contact the address above so the record can be corrected.
+- Authorship and grant: The upstream work was independently created by fallen-leaves with no other human authors, and its public contributor history listed only `Fallen-leaves089` at the time of relicensing. This macOS edition was prepared and relicensed by the same author under the Apache License 2.0.
+- Corrections: If you believe the repository contains unattributed third-party material or has a rights-ownership issue, please contact the address above so the record can be corrected.
 
 ## Redistribution
 

@@ -19,7 +19,8 @@
 - 发布者：fallen-leaves <chenshuidelaye@qq.com>（GitHub: <https://github.com/Fallen-leaves089>）
 - 当前许可证：Apache License 2.0
 - 再授权日期：2026-11-11
-- 说明：本 macOS 衍生版由上游项目的维护者 fallen-leaves 整理，并由同一维护者按 Apache License 2.0 发布。上游公开贡献历史在再授权时仅显示 `Fallen-leaves089`；如你认为有未署名的权利人、贡献者或第三方素材，请通过上述邮箱联系更正。
+- 作者与授权：上游作品由 fallen-leaves 独立创作，没有其他人类作者参与；上游公开贡献历史在再授权时也仅显示 `Fallen-leaves089`。本 macOS 衍生版由同一作者整理，并由其按 Apache License 2.0 发布。
+- 更正联系：如你认为仓库中包含未署名的第三方素材或存在权利归属问题，请通过上述邮箱联系更正。
 
 ## 再分发规则
 
