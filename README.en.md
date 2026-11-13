@@ -17,7 +17,7 @@
 - Platform: macOS
 - Chips: Apple Silicon M1 and later only; Intel Macs and Rosetta terminals are rejected
 - Validation scope: CI observed both Apple M2 Pro (Virtual) and Apple M1 (Virtual) runners on macOS 26.7.2; M1-M6 `arm64` architecture compatibility is covered as platform fact, while M6, M5 Ultra, and macOS 27 are not presented as hardware-validated
-- Requirements: macOS + Git; the package verifier needs Python 3.9+
+- Requirements: macOS + Git; the package verifier needs Python 3.9+; signature verification needs OpenSSH 8.1+
 - License: Apache License 2.0
 
 Quick navigation: [Install](#install) · [Usage](#usage) · [Review workflow](#review-workflow) · [Self-check](#self-check) · [Layout](#layout) · [Download and signatures](#download-and-signatures) · [Citation](#citation) · [License and provenance](#license-and-provenance)
@@ -186,6 +186,8 @@ Check the release public-key fingerprint first:
 ```bash
 ssh-keygen -lf release-signing-key.pub
 ```
+
+`ssh-keygen -Y sign` and `ssh-keygen -Y verify` require **OpenSSH 8.1 or newer**. Older macOS releases may bundle OpenSSH below 8.1; run `ssh -V` first. Below 8.1, only the SHA256 hash and public-key fingerprint can be checked, and the signature identity cannot be verified. See "SSH version requirements" in [SIGNING.en.md](SIGNING.en.md) for upgrade and fallback paths.
 
 See [SIGNING.en.md](SIGNING.en.md) for complete macOS and Linux verification commands. A hash only proves that the file was not corrupted; publisher identity requires verifying `SHA256SUMS.sig`.
 

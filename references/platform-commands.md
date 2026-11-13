@@ -112,6 +112,8 @@ xattr -p com.apple.quarantine <file>
 
 `xattr -d com.apple.quarantine` 会移除隔离标记，不应作为让未验证二进制“能跑”的通用绕法。先核实来源、哈希、签名和 notarization；不得建议关闭 Gatekeeper 或 SIP。
 
+`ssh-keygen -Y sign` / `ssh-keygen -Y verify` 需要 OpenSSH 8.1 或更高版本；先运行 `ssh -V`。低于 8.1 时不能验证 SSHSIG 签名，只能核对 SHA256 和公钥指纹，详见 [SIGNING.md](../SIGNING.md)。
+
 ## 5. 进程、端口与后台服务
 
 | 操作 | macOS |

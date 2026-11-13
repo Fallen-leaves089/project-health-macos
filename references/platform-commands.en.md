@@ -112,6 +112,8 @@ xattr -p com.apple.quarantine <file>
 
 `xattr -d com.apple.quarantine` removes the quarantine flag. It is not a general workaround to make an unverified binary run. Verify provenance, hash, signature, and notarization first; never recommend disabling Gatekeeper or SIP.
 
+`ssh-keygen -Y sign` / `ssh-keygen -Y verify` require OpenSSH 8.1 or newer; run `ssh -V` first. Below 8.1, SSHSIG signatures cannot be verified, and only the SHA256 hash and public-key fingerprint are available. See [SIGNING.en.md](../SIGNING.en.md) for details.
+
 ## 5. Processes, ports, and background services
 
 | Task | macOS |
