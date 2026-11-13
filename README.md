@@ -8,7 +8,7 @@
 [![Release](https://img.shields.io/github/v/release/Fallen-leaves089/project-health-macos?label=release)](https://github.com/Fallen-leaves089/project-health-macos/releases/latest)
 [![Verify](https://img.shields.io/github/actions/workflow/status/Fallen-leaves089/project-health-macos/verify.yml?branch=main&label=verify&logo=github)](https://github.com/Fallen-leaves089/project-health-macos/actions/workflows/verify.yml)
 [![Python](https://img.shields.io/badge/validation-Python%203.9%2B-blue?logo=python&logoColor=white)](#自检)
-[![Software DOI](https://img.shields.io/badge/Software%20DOI-10.5281%2Fzenodo.24184442-blue)](https://doi.org/10.5281/zenodo.24184442)
+[![project-health-macos DOI](https://img.shields.io/badge/project-health-macos%20DOI-10.5281%2Fzenodo.24184442-blue)](https://doi.org/10.5281/zenodo.24184442)
 ![Platform](https://img.shields.io/badge/platform-macOS%20Apple%20Silicon-black?logo=apple&logoColor=white)
 
 **macOS 专用的深度项目体检 Skill。** 从 [project-health](https://github.com/Fallen-leaves089/project-health) 的专业版工作流拆出，只保留 macOS 环境需要的命令、架构差异、权限边界和高隐蔽度陷阱。
@@ -203,7 +203,7 @@ ssh-keygen -lf release-signing-key.pub
 
 ## 引用
 
-作者：[`fallen-leaves`](https://github.com/Fallen-leaves089)；ORCID：[`0009-0005-8897-4831`](https://orcid.org/0009-0005-8897-4831)。软件归档 DOI：[10.5281/zenodo.24184442](https://doi.org/10.5281/zenodo.24184442)。如果这个项目对你的工作有帮助，请按 [`CITATION.cff`](CITATION.cff) 引用。GitHub 仓库页的 **Cite this repository** 可直接生成 APA 和 BibTeX。
+作者：[`fallen-leaves`](https://github.com/Fallen-leaves089)；ORCID：[`0009-0005-8897-4831`](https://orcid.org/0009-0005-8897-4831)。软件归档 DOI（project-health-macos）：[10.5281/zenodo.24184442](https://doi.org/10.5281/zenodo.24184442)。如果这个项目对你的工作有帮助，请按 [`CITATION.cff`](CITATION.cff) 引用。GitHub 仓库页的 **Cite this repository** 可直接生成 APA 和 BibTeX。
 
 ## 许可与来源
 
