@@ -37,7 +37,6 @@
 - **拒绝 Intel/Rosetta 环境**：正式检查要求 `uname -m` 为 `arm64` 且 Rosetta 状态为 `0`。
 - **专注隐蔽问题**：Gatekeeper/quarantine、TCC 权限、APFS 大小写与 Unicode 规范化、BSD 工具差异、系统 bash 3.2、归档扩展属性等。
 - **与专业版同步隐藏坑**：`MAC-H01`～`MAC-H08` 覆盖 Rosetta、AirPlay/本地网络、Xcode/SDK、多语言工具链、dylib 签名、归档元数据、性能基线和 runner 覆盖范围；改动必须同步专业版。
-- **与专业版同步隐藏坑**：`MAC-H01`～`MAC-H08` 覆盖 Rosetta、AirPlay/本地网络、Xcode/SDK、多语言工具链、dylib 签名、归档元数据、性能基线和 runner 覆盖范围；改动必须同步专业版。
 - **校验器只认 macOS 包**：发现非 macOS 脚本、避坑文档或典型非 macOS 命令时直接失败。
 - **隐私扫描覆盖 `/Users/<real-name>`**：避免个人主目录路径进入公开报告。
 - **CI 使用 Apple Silicon runner**：GitHub Actions 在 `macos-latest` 上硬性检查 `arm64`，Intel runner 直接失败。
