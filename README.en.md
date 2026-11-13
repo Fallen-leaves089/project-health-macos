@@ -202,6 +202,13 @@ The repository uses a protected `main` trunk. See [BRANCHING.md](BRANCHING.md) f
 
 ## Citation
 
+### DOI classification
+
+| Project | Type | DOI |
+|---|---|---|
+| `project-health` | Software archive | [10.5281/zenodo.24184440](https://doi.org/10.5281/zenodo.24184440) |
+| `project-health-macos` | Software archive | [10.5281/zenodo.24184442](https://doi.org/10.5281/zenodo.24184442) |
+
 Author: [`fallen-leaves`](https://github.com/Fallen-leaves089); ORCID: [`0009-0005-8897-4831`](https://orcid.org/0009-0005-8897-4831). Software archive DOI (project-health-macos): [10.5281/zenodo.24184442](https://doi.org/10.5281/zenodo.24184442). If this project helps your work, cite it using [`CITATION.cff`](CITATION.cff). The repository's **Cite this repository** menu can generate APA and BibTeX.
 
 ## License and provenance
