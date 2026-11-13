@@ -2,20 +2,26 @@
 
 [中文](README.md) | [English](README.en.md)
 
+[![Author](https://img.shields.io/badge/author-fallen--leaves-181717?logo=github&logoColor=white)](https://github.com/Fallen-leaves089)
 [![ORCID](https://img.shields.io/badge/ORCID-0009--0005--8897--4831-A6CE39?logo=orcid&logoColor=white)](https://orcid.org/0009-0005-8897-4831)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Release](https://img.shields.io/github/v/release/Fallen-leaves089/project-health-macos?label=release)](https://github.com/Fallen-leaves089/project-health-macos/releases/latest)
 [![Verify](https://img.shields.io/github/actions/workflow/status/Fallen-leaves089/project-health-macos/verify.yml?branch=main&label=verify&logo=github)](https://github.com/Fallen-leaves089/project-health-macos/actions/workflows/verify.yml)
+[![Python](https://img.shields.io/badge/validation-Python%203.9%2B-blue?logo=python&logoColor=white)](#self-check)
 ![Platform](https://img.shields.io/badge/platform-macOS%20Apple%20Silicon-black?logo=apple&logoColor=white)
 
 **A macOS-only deep project health-check skill.** Extracted from the professional [project-health](https://github.com/Fallen-leaves089/project-health) workflow, keeping only the commands, architecture differences, permission boundaries, and hard-to-spot traps that matter on macOS.
 
-- Version: `1.0.1`
+- Version: `1.0.1` ([changelog](CHANGELOG.md))
 - Platform: macOS
 - Chips: Apple Silicon M1 and later only; Intel Macs and Rosetta terminals are rejected
 - Validation scope: CI observed both Apple M2 Pro (Virtual) and Apple M1 (Virtual) runners on macOS 26.7.2; M1-M6 `arm64` architecture compatibility is covered as platform fact, while M6, M5 Ultra, and macOS 27 are not presented as hardware-validated
 - Requirements: macOS + Git; the package verifier needs Python 3.9+
 - License: Apache License 2.0
+
+Quick navigation: [Install](#install) · [Usage](#usage) · [Review workflow](#review-workflow) · [Self-check](#self-check) · [Layout](#layout) · [Download and signatures](#download-and-signatures) · [Citation](#citation) · [License and provenance](#license-and-provenance)
+
+Repository links: [Source](https://github.com/Fallen-leaves089/project-health-macos) · [Releases](https://github.com/Fallen-leaves089/project-health-macos/releases/latest) · [Changelog](CHANGELOG.md) · [Issues](https://github.com/Fallen-leaves089/project-health-macos/issues) · [Trial checklist](TRIAL.md) · [Branches and releases](BRANCHING.md) · [Security](SECURITY.md)
 
 ## What it does
 

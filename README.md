@@ -2,20 +2,26 @@
 
 [中文](README.md) | [English](README.en.md)
 
+[![Author](https://img.shields.io/badge/author-fallen--leaves-181717?logo=github&logoColor=white)](https://github.com/Fallen-leaves089)
 [![ORCID](https://img.shields.io/badge/ORCID-0009--0005--8897--4831-A6CE39?logo=orcid&logoColor=white)](https://orcid.org/0009-0005-8897-4831)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Release](https://img.shields.io/github/v/release/Fallen-leaves089/project-health-macos?label=release)](https://github.com/Fallen-leaves089/project-health-macos/releases/latest)
 [![Verify](https://img.shields.io/github/actions/workflow/status/Fallen-leaves089/project-health-macos/verify.yml?branch=main&label=verify&logo=github)](https://github.com/Fallen-leaves089/project-health-macos/actions/workflows/verify.yml)
+[![Python](https://img.shields.io/badge/validation-Python%203.9%2B-blue?logo=python&logoColor=white)](#自检)
 ![Platform](https://img.shields.io/badge/platform-macOS%20Apple%20Silicon-black?logo=apple&logoColor=white)
 
 **macOS 专用的深度项目体检 Skill。** 从 [project-health](https://github.com/Fallen-leaves089/project-health) 的专业版工作流拆出，只保留 macOS 环境需要的命令、架构差异、权限边界和高隐蔽度陷阱。
 
-- 当前版本：`1.0.1`
+- 当前版本：`1.0.1`（[更新记录](CHANGELOG.md)）
 - 适用平台：macOS
 - 芯片范围：仅 Apple Silicon M1 及后续世代；Intel Mac 和 Rosetta 终端不进入正式检查
 - 验证范围：CI 已观察到 macOS 26.7.2 上的 Apple M2 Pro (Virtual) 和 Apple M1 (Virtual) 两种 runner；M1–M6 的 `arm64` 架构兼容性按平台事实覆盖，M6、M5 Ultra 和 macOS 27 不作为已实机验证范围
 - 运行要求：macOS + Git；包校验器需要 Python 3.9+
 - 许可：Apache License 2.0
+
+快速导航：[安装](#安装) · [怎么用](#怎么用) · [检查流程](#检查流程) · [自检](#自检) · [目录](#目录) · [下载与签名](#下载与签名) · [引用](#引用) · [许可与来源](#许可与来源)
+
+仓库入口：[源码](https://github.com/Fallen-leaves089/project-health-macos) · [发布下载](https://github.com/Fallen-leaves089/project-health-macos/releases/latest) · [更新记录](CHANGELOG.md) · [问题反馈](https://github.com/Fallen-leaves089/project-health-macos/issues) · [试用清单](TRIAL.md) · [分支与发布](BRANCHING.md) · [安全策略](SECURITY.md)
 
 ## 它解决什么
 
