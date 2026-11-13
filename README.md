@@ -17,7 +17,7 @@
 - 适用平台：macOS
 - 芯片范围：仅 Apple Silicon M1 及后续世代；Intel Mac 和 Rosetta 终端不进入正式检查
 - 验证范围：CI 已观察到 macOS 26.7.2 上的 Apple M2 Pro (Virtual) 和 Apple M1 (Virtual) 两种 runner；M1–M6 的 `arm64` 架构兼容性按平台事实覆盖，M6、M5 Ultra 和 macOS 27 不作为已实机验证范围
-- 运行要求：macOS + Git；包校验器需要 Python 3.9+
+- 运行要求：macOS + Git；包校验器需要 Python 3.9+；签名验证需要 OpenSSH 8.1+
 - 许可：Apache License 2.0
 
 快速导航：[安装](#安装) · [怎么用](#怎么用) · [检查流程](#检查流程) · [自检](#自检) · [目录](#目录) · [下载与签名](#下载与签名) · [引用](#引用) · [许可与来源](#许可与来源)
@@ -187,6 +187,8 @@ project-health-macos/
 ```bash
 ssh-keygen -lf release-signing-key.pub
 ```
+
+`ssh-keygen -Y sign` 和 `ssh-keygen -Y verify` 需要 **OpenSSH 8.1 或更高版本**；较旧 macOS 自带的 OpenSSH 可能低于 8.1，先运行 `ssh -V` 确认。低于 8.1 时只能核对 SHA256 和公钥指纹，不能验证签名身份；升级或替代验证方式见 [SIGNING.md](SIGNING.md) 的“SSH 版本要求”。
 
 完整的 macOS 和 Linux 校验命令见 [SIGNING.md](SIGNING.md)。哈希只能证明文件未损坏，身份验证必须同时验证 `SHA256SUMS.sig`。
 
