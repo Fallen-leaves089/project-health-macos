@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata in this file."
+title: "project-health-macos"
+abstract: "A macOS-only, Apple Silicon project audit and delivery-acceptance skill derived from project-health. It covers standards and specification review, real build, migration and container regression, and produces P0-P3 findings with file and line evidence."
+version: "1.0.1"
+date-released: "2026-11-11"
+license: "Apache-2.0"
+type: software
+authors:
+  - family-names: "fallen-leaves"
+    alias: "fallen-leaves089"
+    orcid: "https://orcid.org/0009-0005-8897-4831"
+    website: "https://github.com/Fallen-leaves089"
+repository-code: "https://github.com/Fallen-leaves089/project-health-macos"
+url: "https://github.com/Fallen-leaves089/project-health-macos"
+keywords:
+  - macOS
+  - Apple Silicon
+  - project health
+  - software audit
+  - AI coding agents
