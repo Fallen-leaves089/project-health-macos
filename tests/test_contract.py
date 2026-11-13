@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import json
 import re
 import shutil
 import subprocess
@@ -15,7 +16,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 FIXTURE_DIR = ROOT / "tests" / "fixtures" / "malicious-target"
 FIXTURE = FIXTURE_DIR / "malicious-agents.fixture"
-EXPECTED_VERSION = "1.0.1"
+EXPECTED_VERSION = "1.0.3"
 EXPECTED_NAME = "project-health-macos"
 EXPECTED_LICENSE = "Apache-2.0"
 
@@ -187,7 +188,7 @@ class UntrustedTargetContractTests(unittest.TestCase):
         self.assertIn(f"- 当前版本：`{EXPECTED_VERSION}`", read_text("README.md"))
         self.assertIn(f"- Version: `{EXPECTED_VERSION}`", read_text("README.en.md"))
         self.assertIn(
-            f"## {EXPECTED_VERSION} - 2026-11-11",
+            f"## {EXPECTED_VERSION} - 2026-11-13",
             read_text("CHANGELOG.md"),
         )
 
@@ -247,6 +248,77 @@ class UntrustedTargetContractTests(unittest.TestCase):
                     self.assertNotIn(claim, content)
             with self.subTest(relative=relative, topic="runner pool"):
                 self.assertIn("runner", content.lower())
+
+    def test_pitfall_memory_and_autonomous_recording_are_documented(self) -> None:
+        expectations = {
+            "SKILL.md": (
+                "PITFALLS.local.md",
+                "scripts/record_pitfall.py",
+                "记忆：新增",
+                "同一大类下的新失败机制",
+                "记忆范围",
+            ),
+            "SKILL.en.md": (
+                "PITFALLS.local.md",
+                "scripts/record_pitfall.py",
+                "Memory: appended",
+                "not a duplicate",
+                "Scope",
+            ),
+            "AGENTS.md": (
+                "PITFALLS.local.md",
+                "scripts/record_pitfall.py",
+                "记忆：新增",
+                "同一大类下的新失败机制",
+            ),
+            "README.md": ("PITFALLS.local.md", "本地避坑记忆", "agent_memory_eval"),
+            "README.en.md": ("PITFALLS.local.md", "Local pitfall memory", "agent_memory_eval"),
+        }
+        for relative, phrases in expectations.items():
+            content = read_text(relative)
+            for phrase in phrases:
+                with self.subTest(relative=relative, phrase=phrase):
+                    self.assertIn(phrase, content)
+        self.assertIn("PITFALLS.local.md", read_text(".gitignore"))
+
+    def test_pitfall_recorder_and_eval_are_packaged(self) -> None:
+        required = (
+            "scripts/record_pitfall.py",
+            "tests/test_record_pitfall.py",
+            "tests/agent_memory_eval.py",
+            "tests/test_agent_memory_eval.py",
+            "tests/fixtures/agent-memory-eval/prompt.txt",
+            "tests/fixtures/agent-memory-eval/zero-tests/expect.json",
+            "tests/fixtures/agent-memory-eval/coverage-threshold/expect.json",
+        )
+        for relative in required:
+            with self.subTest(relative=relative):
+                self.assertTrue((ROOT / relative).is_file())
+        verifier = read_text("scripts/verify_package.py")
+        for relative in required:
+            with self.subTest(verifier=relative):
+                self.assertIn(relative, verifier)
+
+    def test_agent_memory_eval_is_optional_and_scenarios_are_unseen(self) -> None:
+        prompt = read_text("tests/fixtures/agent-memory-eval/prompt.txt").casefold()
+        for forbidden in ("record", "pitfall", "memory", "pitfalls"):
+            with self.subTest(prompt_forbidden=forbidden):
+                self.assertNotIn(forbidden, prompt)
+
+        workflow = read_text(".github/workflows/verify.yml")
+        self.assertNotIn("agent_memory_eval", workflow)
+        baseline = read_text("PITFALLS.md").casefold()
+        for scenario in ("zero-tests", "coverage-threshold"):
+            relative = f"tests/fixtures/agent-memory-eval/{scenario}/expect.json"
+            expect = json.loads(read_text(relative))
+            self.assertTrue(expect["required_groups"])
+            for phrase in expect["baseline_forbidden"]:
+                with self.subTest(scenario=scenario, phrase=phrase):
+                    self.assertNotIn(
+                        phrase.casefold(),
+                        baseline,
+                        msg=f"{scenario} is already covered by the baseline: {phrase}",
+                    )
 
     def test_license_is_apache_and_attributed_to_owner(self) -> None:
         license_text = read_text("LICENSE")
@@ -340,6 +412,28 @@ class UntrustedTargetContractTests(unittest.TestCase):
         ):
             with self.subTest(topic=topic):
                 self.assertIn(topic, content)
+
+    def test_macos_hidden_pitfall_sync_baseline_is_complete(self) -> None:
+        ids = [f"MAC-H{number:02d}" for number in range(1, 9)]
+        for relative in (
+            "SKILL.md",
+            "SKILL.en.md",
+            "references/macos-pitfalls.md",
+            "references/macos-pitfalls.en.md",
+        ):
+            content = read_text(relative)
+            for pitfall_id in ids:
+                with self.subTest(file=relative, pitfall_id=pitfall_id):
+                    self.assertIn(pitfall_id, content)
+
+        self.assertIn("隐藏坑同步基线", read_text("references/macos-pitfalls.md"))
+        self.assertIn("Hidden-pitfall sync baseline", read_text("references/macos-pitfalls.en.md"))
+        for phrase in ("AirPlay", "xcodebuild", "otool -L", "hw.memsize", "本地网络"):
+            with self.subTest(file="references/macos-pitfalls.md", phrase=phrase):
+                self.assertIn(phrase, read_text("references/macos-pitfalls.md"))
+        for phrase in ("AirPlay", "xcodebuild", "otool -L", "hw.memsize", "local-network"):
+            with self.subTest(file="references/macos-pitfalls.en.md", phrase=phrase):
+                self.assertIn(phrase, read_text("references/macos-pitfalls.en.md"))
 
     def test_macos_smoke_probes_current_volume_case_behavior(self) -> None:
         smoke = read_text("scripts/smoke_macos_runtime.sh")

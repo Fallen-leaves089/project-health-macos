@@ -2,7 +2,7 @@ cff-version: 1.2.0
 message: "If you use this software, please cite it using the metadata in this file."
 title: "project-health-macos"
 abstract: "A macOS-only, Apple Silicon project audit and delivery-acceptance skill derived from project-health. It covers standards and specification review, real build, migration and container regression, and produces P0-P3 findings with file and line evidence."
-version: "1.0.1"
+version: "1.0.3"
 date-released: "2026-11-11"
 license: "Apache-2.0"
 type: software

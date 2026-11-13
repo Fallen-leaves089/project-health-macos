@@ -12,7 +12,7 @@
 
 **macOS 专用的深度项目体检 Skill。** 从 [project-health](https://github.com/Fallen-leaves089/project-health) 的专业版工作流拆出，只保留 macOS 环境需要的命令、架构差异、权限边界和高隐蔽度陷阱。
 
-- 当前版本：`1.0.1`（[更新记录](CHANGELOG.md)）
+- 当前版本：`1.0.3`（[更新记录](CHANGELOG.md)）
 - 适用平台：macOS
 - 芯片范围：仅 Apple Silicon M1 及后续世代；Intel Mac 和 Rosetta 终端不进入正式检查
 - 验证范围：CI 已观察到 macOS 26.7.2 上的 Apple M2 Pro (Virtual) 和 Apple M1 (Virtual) 两种 runner；M1–M6 的 `arm64` 架构兼容性按平台事实覆盖，M6、M5 Ultra 和 macOS 27 不作为已实机验证范围
@@ -35,6 +35,8 @@
 - **覆盖 Apple Silicon 生命周期**：从 M1 到后续芯片，记录 Rosetta、Homebrew 前缀、多架构依赖、Docker 镜像架构和 CI runner 差异。
 - **拒绝 Intel/Rosetta 环境**：正式检查要求 `uname -m` 为 `arm64` 且 Rosetta 状态为 `0`。
 - **专注隐蔽问题**：Gatekeeper/quarantine、TCC 权限、APFS 大小写与 Unicode 规范化、BSD 工具差异、系统 bash 3.2、归档扩展属性等。
+- **与专业版同步隐藏坑**：`MAC-H01`～`MAC-H08` 覆盖 Rosetta、AirPlay/本地网络、Xcode/SDK、多语言工具链、dylib 签名、归档元数据、性能基线和 runner 覆盖范围；改动必须同步专业版。
+- **与专业版同步隐藏坑**：`MAC-H01`～`MAC-H08` 覆盖 Rosetta、AirPlay/本地网络、Xcode/SDK、多语言工具链、dylib 签名、归档元数据、性能基线和 runner 覆盖范围；改动必须同步专业版。
 - **校验器只认 macOS 包**：发现非 macOS 脚本、避坑文档或典型非 macOS 命令时直接失败。
 - **隐私扫描覆盖 `/Users/<real-name>`**：避免个人主目录路径进入公开报告。
 - **CI 使用 Apple Silicon runner**：GitHub Actions 在 `macos-latest` 上硬性检查 `arm64`，Intel runner 直接失败。
@@ -72,6 +74,8 @@ test -f "$HOME/.claude/skills/project-health-macos/SKILL.md"
 其他 Agent Skills 宿主：把仓库克隆到宿主配置的技能目录，目录名建议保持 `project-health-macos`。
 
 安装时必须带上整个目录；不要只复制 `SKILL.md`。`AGENTS.md`、`PITFALLS.md`、`PROVENANCE.md`、`references/`、`scripts/` 和 `tests/` 都是包的一部分。
+
+> **本地避坑记忆**：安装后，Agent 核实的新坑默认追加到 `PITFALLS.local.md`，首次使用时自动创建，后续任务开始时会先读回；`git pull --ff-only` 不会删除它。升级时不要手工清理该文件，覆盖安装前先备份。
 
 安装后先确认运行环境：
 
@@ -131,6 +135,16 @@ python3 scripts/check_redaction.py --self-test
 - 中英文 frontmatter 的名称、版本和许可证是否一致；
 - 是否残留典型非 macOS 命令或脚本入口；
 - 脱敏扫描器的正反例是否都能成立。
+
+### 可选：验证 Agent 是否会自主记录新坑
+
+默认测试只验证记录器和规则，不会调用外部 Agent。要验证真实行为，可运行：
+
+```bash
+python3 -B tests/agent_memory_eval.py --codex <codex> --require-scenario-match --min-passed 2
+```
+
+评测器会把技能和目标夹具复制到临时目录，提示词只要求审计，不出现“记录 / memory / pitfalls”等答案词；随后检查 Agent 是否主动写入 `PITFALLS.local.md`、条目是否匹配新场景、目标目录和基线是否保持不变。它依赖外部 Agent，结果有非确定性，因此不放进默认 CI。
 
 ## 目录
 
