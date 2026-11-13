@@ -24,3 +24,4 @@
 - 2026-11-13 | toolchain, dylib, signing | Python/Node/Java 原生模块或 dylib 能加载 | 只检查版本号，或注入 `DYLD_LIBRARY_PATH` 后看到能跑就判定兼容；修改 dylib 后不重签名 | 用 `file`、`lipo -info`、`platform.machine()`、`process.arch`、`java -XshowSettings`、`otool -L` 交叉确认；修改后重新签名并检查 entitlement | 解释器、原生模块、dylib 架构和签名一致
 - 2026-11-13 | performance, baseline | 用 M1 的并发/线程数评估 M5/M6 性能 | 把固定 worker 数、连接池或 Docker CPU 限制跨世代照搬 | 记录芯片、核心、内存、`vm_stat` 和负载参数；按目标世代重建基线；`powermetrics` 不能默认可用 | 硬件信息、负载和性能结果绑定
 - 2026-11-13 | docs, sync | 更新隐藏坑清单 | 只改专用版或只改中文，专业版/英文版漏同步 | 用 `MAC-H01`～`MAC-H08` 共享编号同时更新两仓库中英文参考、SKILL 表和契约测试 | 两个仓库的契约测试均检查编号和关键证据
+2026-11-13 | testing, macos, paths | 在 macOS 上比较临时目录路径时直接比较未规范化的 Path | 把 /var 与 /private/var 当作不同目录，导致契约测试假失败 | 比较前对两边调用 resolve()，或使用 samefile；不要硬编码私有前缀 | GitHub macOS runner 上 Python 3.9/3.12 契约测试通过

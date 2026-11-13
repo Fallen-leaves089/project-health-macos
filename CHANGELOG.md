@@ -11,6 +11,7 @@
 - Added the autonomous memory checkpoint, parent-ID rule for new mechanisms under an existing class, reusable project failure-mode scope, and the memory result in the final report.
 - Added recorder tests, evaluator tests, and two baseline-unseen false-green scenarios. The real agent evaluation is optional and is not invoked by default CI.
 - Documented local memory in the README and preservation during upgrades.
+- Fixed false path-assertion failures caused by the `/var` to `/private/var` symlink on macOS; normalize paths before cross-platform comparisons.
 
 ## 1.0.2 - 2026-11-13
 
