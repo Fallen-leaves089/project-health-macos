@@ -27,6 +27,21 @@ system_profiler SPHardwareDataType | grep -E 'Chip|Memory|Model Name'
 
 Do not infer the chip from the macOS version, and do not infer the absence of Rosetta from `uname -m` alone. Verify both separately.
 
+## Hidden-pitfall sync baseline
+
+These eight IDs are shared by the dedicated `project-health-macos` edition and the professional `project-health` edition. Any addition, rewrite, or deletion must update both Chinese and English documents in both repositories. Contract tests check the IDs and key evidence; updating only one repository is incomplete.
+
+| ID | Hidden pitfall | Minimum evidence |
+|---|---|---|
+| MAC-H01 | A Rosetta terminal, IDE, CI step, or parent process pushes the whole toolchain into x86_64 | `uname -m`, `arch`, `sysctl -in sysctl.proc_translated`, then `file` and `lipo -info` on interpreters and binaries |
+| MAC-H02 | AirPlay Receiver occupies 5000/7000, `localhost` resolves to `::1`, or local-network/TCC permission fails without a prompt | `lsof -nP -iTCP:5000 -sTCP:LISTEN` and the same for 7000; `curl -4` / `curl -6`; record permission and session type |
+| MAC-H03 | Only Command Line Tools are installed, the wrong Xcode is selected, or the license/SDK does not match | `xcode-select -p`, `xcodebuild -version`, `xcrun --show-sdk-path`, `xcodebuild -license check` |
+| MAC-H04 | Python, Node, Java, or native modules mix arm64 and x86_64 | `file`, `lipo -info`, `platform.machine()`, `process.arch`, `java -XshowSettings` |
+| MAC-H05 | A dylib has the wrong architecture, `DYLD_*` is ignored by SIP, or a modified library was not re-signed | `otool -L`, `codesign --verify --deep --strict`, `codesign -d --entitlements :-` |
+| MAC-H06 | Quarantine, extended attributes, AppleDouble files, resource forks, or symlinks are lost in an archive | `xattr -p com.apple.quarantine`; package with `ditto`, then verify in a clean extraction directory |
+| MAC-H07 | M1 thread counts, concurrency, connection pools, or performance baselines are copied to M5/M6 | `sysctl -n hw.ncpu`, `sysctl -n hw.memsize`, `vm_stat`, `system_profiler SPHardwareDataType` |
+| MAC-H08 | One arm64 runner or one chip is presented as coverage for every M-series Mac or Intel | Record chip, CPU, memory, macOS, Xcode/SDK, and Rosetta state; list untested generations as uncovered |
+
 ## 1. Chip generations and what they mean for reviews
 
 | Generation | Time and representative systems | What actually matters during a review |
@@ -181,6 +196,20 @@ kill -TERM <pid>
 
 Linux habits such as `ss` and `netstat -tulpn` do not transfer directly. If `lsof` cannot see another user's or a protected process, check permissions and TCC before adding `sudo` or sending repeated kills.
 
+**Most easily missed listeners:**
+
+```bash
+lsof -nP -iTCP:5000 -sTCP:LISTEN
+lsof -nP -iTCP:7000 -sTCP:LISTEN
+curl -4 -v http://127.0.0.1:<port>/
+curl -6 -v "http://[::1]:<port>/" 2>/dev/null || true
+```
+
+- AirPlay Receiver may appear as `ControlCenter` on 5000/7000. Do not disable a system feature just to make a project test pass; change the test port or bind address first.
+- `localhost` may resolve to `::1` while the service listens only on `127.0.0.1`. Test both `curl -4` and `curl -6`; do not test only one address family.
+- macOS 15+ may request Local Network permission on first access. CI, SSH, or a no-GUI session may not be able to show the prompt. Record a denial as an environment limit, not as a service crash.
+- If no listener is visible, assess permissions and process domain first. Do not default to `sudo`, `kill -9`, or disabling the firewall to "clear" the problem.
+
 ## 12. Archives, extended attributes, resource forks, and symlinks
 
 **Symptom:** ordinary `zip`/`tar` creation and extraction lose signatures, quarantine, executable bits, symlinks, or extended attributes. macOS also creates `__MACOSX` and `._*` entries that pollute artifacts.
@@ -234,6 +263,11 @@ otool -L <binary-or-dylib>
 
 Re-sign after modifying a dylib. `DYLD_LIBRARY_PATH` may be ignored by protected processes or under SIP. Do not treat environment injection as a long-term compatibility solution.
 
+- A universal2 wheel may contain both architectures; `platform.machine()` describes the current process, not a guarantee that the artifact is single-architecture.
+- For `node-gyp`, sharp, canvas, SQLite, or another native module with mixed architecture, delete caches and reinstall under native arm64; do not copy `node_modules` across architectures.
+- JDKs, JNI libraries, and container base images must share one architecture. Replacing only `JAVA_HOME` without reinstalling JNI dependencies may still load the wrong `.dylib`.
+- Use `codesign -d --entitlements :-` to inspect JIT, debugger, or hardened-runtime entitlements. Do not disable SIP to work around them.
+
 ## 14. Xcode, Command Line Tools, and SDKs
 
 **Symptom:** `xcode-select -p` points to Command Line Tools while the project needs full Xcode; multiple Xcodes make `xcodebuild` use the wrong one; an unaccepted CLT license causes an opaque CI failure.
@@ -242,10 +276,15 @@ Re-sign after modifying a dylib. `DYLD_LIBRARY_PATH` may be ignored by protected
 xcode-select -p
 xcodebuild -version
 xcrun --show-sdk-path
-sudo xcodebuild -license check
+xcodebuild -license check
 ```
 
 Record Xcode, SDK, Command Line Tools, and `MACOSX_DEPLOYMENT_TARGET`. Do not run `sudo xcode-select -s` or `xcodebuild -runFirstLaunch` without stating the impact. On Apple Silicon, verify target architecture and signing settings; "it compiled" is not enough.
+
+- If `xcode-select -p` points to `/Library/Developer/CommandLineTools`, that proves only CLT presence, not a full Xcode project, Interface Builder, simulator, or signing flow.
+- With multiple Xcodes, record `xcodebuild -version` and the actual developer directory; do not rely on `xcode-select -p` alone.
+- `xcodebuild -license check` is read-only. During an audit, do not run `sudo xcodebuild -license accept` or other state-changing commands.
+- Record `xcrun --show-sdk-path`, `xcodebuild -showsdks`, and `MACOSX_DEPLOYMENT_TARGET` together so "it compiled" does not hide the wrong SDK or deployment target.
 
 ## 15. Do not reuse performance baselines across generations
 
@@ -259,6 +298,15 @@ sysctl -n machdep.cpu.brand_string
 ```
 
 Bind performance conclusions to chip, memory, macOS, Xcode/SDK, workload, and concurrency. CI proves functional and basic regressions; it does not replace M6 or M5 Ultra hardware testing.
+
+```bash
+sysctl -n hw.ncpu
+sysctl -n hw.memsize
+vm_stat
+system_profiler SPHardwareDataType
+```
+
+`powermetrics` requires additional privileges and must not be assumed available. One M1 worker count, connection pool, or Docker CPU limit does not prove an M5/M6 result.
 
 ## 16. GitHub macOS runners are not the newest Macs
 
@@ -292,6 +340,9 @@ Review rules:
 - Cross-platform paths were tested only on case-insensitive APFS, missing a case collision.
 - The app was declared runnable only after removing quarantine with `xattr -d`.
 - A Docker image starts, so its architecture is assumed to match the host.
+- `lsof` shows no listener, so the service is declared dead without ruling out AirPlay 5000/7000, IPv6 `::1`, or permission limits.
+- Only Command Line Tools are installed, but an iOS/macOS project is reported as built or signed successfully.
+- A modified dylib is not re-signed, or ignored `DYLD_LIBRARY_PATH` is treated as a code bug.
 - CI passes on one arm64 runner image/chip, then the result is presented as coverage for every M-series Mac or macOS 27.
 
 ## 18. Sources

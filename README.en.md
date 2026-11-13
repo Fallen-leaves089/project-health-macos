@@ -12,7 +12,7 @@
 
 **A macOS-only deep project health-check skill.** Extracted from the professional [project-health](https://github.com/Fallen-leaves089/project-health) workflow, keeping only the commands, architecture differences, permission boundaries, and hard-to-spot traps that matter on macOS.
 
-- Version: `1.0.1` ([changelog](CHANGELOG.md))
+- Version: `1.0.3` ([changelog](CHANGELOG.md))
 - Platform: macOS
 - Chips: Apple Silicon M1 and later only; Intel Macs and Rosetta terminals are rejected
 - Validation scope: CI observed both Apple M2 Pro (Virtual) and Apple M1 (Virtual) runners on macOS 26.7.2; M1-M6 `arm64` architecture compatibility is covered as platform fact, while M6, M5 Ultra, and macOS 27 are not presented as hardware-validated
@@ -35,6 +35,7 @@ It is not tied to Codex and does not require a double-click installer. Any host 
 - **Apple Silicon coverage**: Rosetta, Homebrew prefixes, multi-architecture dependencies, Docker image architecture, and CI runner differences across M1 and later generations.
 - **Intel/Rosetta rejection**: formal reviews require `uname -m` = `arm64` and Rosetta state `0`.
 - **Focus on hidden failures**: Gatekeeper/quarantine, TCC permissions, APFS case sensitivity and Unicode normalization, BSD tool differences, system bash 3.2, archive metadata, and more.
+- **Sync hidden pitfalls with the professional edition**: `MAC-H01` through `MAC-H08` cover Rosetta, AirPlay/local networking, Xcode/SDK, multi-language toolchains, dylib signing, archive metadata, performance baselines, and runner coverage; changes must be mirrored to the professional edition.
 - **macOS-only package checks**: non-macOS trap files, script entry points, or typical non-macOS commands fail verification.
 - **Private path scanning for `/Users/<real-name>`**: prevents a real home-directory path from entering a public report.
 - **Apple Silicon CI**: GitHub Actions runs on `macos-latest` and fails hard unless the runner reports `arm64`.
@@ -72,6 +73,8 @@ test -f "$HOME/.claude/skills/project-health-macos/SKILL.md"
 For another Agent Skills host, clone the repository into its configured skill directory and keep the directory name `project-health-macos`.
 
 Install the whole directory, not only `SKILL.md`. `AGENTS.md`, `PITFALLS.md`, `PROVENANCE.en.md`, `references/`, `scripts/`, and `tests/` are part of the package.
+
+> **Local pitfall memory**: after installation, verified new pitfalls are appended to `PITFALLS.local.md`. It is created on first use, read back at the start of later tasks, and is not removed by `git pull --ff-only`. Do not clear it during upgrades; back it up before a replacement install.
 
 Check the runtime environment after installation:
 
@@ -131,6 +134,16 @@ The package verifier checks:
 - Chinese and English frontmatter share the same name, version, and license;
 - typical non-macOS commands or script entry points have not leaked back in;
 - the redaction scanner passes both positive and negative cases.
+
+### Optional: verify autonomous pitfall recording
+
+The default tests validate the recorder and rules without calling an external agent. To test real behavior:
+
+```bash
+python3 -B tests/agent_memory_eval.py --codex <codex> --require-scenario-match --min-passed 2
+```
+
+The evaluator copies the skill and a fixture target into a temporary directory. Its prompt only asks for an audit and never mentions "record", "memory", or "pitfalls". It then checks whether the agent wrote `PITFALLS.local.md`, whether the entry matches the new scenario, and whether the target and baseline stayed unchanged. It relies on an external agent and is non-deterministic, so it is not part of default CI.
 
 ## Layout
 

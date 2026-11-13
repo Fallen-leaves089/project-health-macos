@@ -27,6 +27,21 @@ system_profiler SPHardwareDataType | grep -E 'Chip|Memory|Model Name'
 
 不要只凭 macOS 版本推断芯片，也不要只凭 `uname -m` 推断没有 Rosetta。两者必须分开确认。
 
+## 隐藏坑同步基线
+
+以下 8 个编号由专用版 `project-health-macos` 与专业版 `project-health` 共用。新增、改写或删除任一条时，必须同步两边的中英文文档；契约测试会检查编号和关键证据。只更新一个仓库不算完成。
+
+| ID | 隐藏坑 | 最低证据 |
+|---|---|---|
+| MAC-H01 | Rosetta 终端、IDE、CI step 或父进程让整个工具链混入 x86_64 | `uname -m`、`arch`、`sysctl -in sysctl.proc_translated`，再用 `file`、`lipo -info` 检查解释器和二进制 |
+| MAC-H02 | AirPlay Receiver 占用 5000/7000、`localhost` 先解析到 `::1`，或本地网络/TCC 权限不弹窗 | `lsof -nP -iTCP:5000 -sTCP:LISTEN`、7000 同查；`curl -4` / `curl -6`；记录权限与会话类型 |
+| MAC-H03 | 只有 Command Line Tools、没有完整 Xcode；多 Xcode 选错；license/SDK 不匹配 | `xcode-select -p`、`xcodebuild -version`、`xcrun --show-sdk-path`、`xcodebuild -license check` |
+| MAC-H04 | Python、Node、Java 或原生模块混用 arm64 与 x86_64 | `file`、`lipo -info`、`platform.machine()`、`process.arch`、`java -XshowSettings` |
+| MAC-H05 | dylib 架构错误、`DYLD_*` 被 SIP 忽略，或改库后没有重新签名 | `otool -L`、`codesign --verify --deep --strict`、`codesign -d --entitlements :-` |
+| MAC-H06 | quarantine、扩展属性、AppleDouble、资源叉或符号链接在归档后丢失 | `xattr -p com.apple.quarantine`；用 `ditto` 打包，并在干净目录解压复核 |
+| MAC-H07 | 把 M1 的线程数、并发、连接池或性能基线照搬到 M5/M6 | `sysctl -n hw.ncpu`、`sysctl -n hw.memsize`、`vm_stat`、`system_profiler SPHardwareDataType` |
+| MAC-H08 | 单个 arm64 runner/单个芯片通过后被写成所有 M 系列或 Intel 通过 | 记录芯片、CPU、内存、macOS、Xcode/SDK、Rosetta 状态；未跑的世代列入未覆盖 |
+
 ## 1. 芯片世代与审计含义
 
 | 世代 | 时间与代表机型 | 审计时真正需要关注什么 |
@@ -191,6 +206,20 @@ kill -TERM <pid>
 
 `ss`、`netstat -tulpn` 的 Linux 习惯在 macOS 上不可直接复用。`lsof` 看不到其他用户或受保护进程时，先判断权限和 TCC，不要直接加 `sudo` 或反复强杀。
 
+**最容易漏掉的占用：**
+
+```bash
+lsof -nP -iTCP:5000 -sTCP:LISTEN
+lsof -nP -iTCP:7000 -sTCP:LISTEN
+curl -4 -v http://127.0.0.1:<port>/
+curl -6 -v "http://[::1]:<port>/" 2>/dev/null || true
+```
+
+- macOS 的 AirPlay Receiver 可能由 `ControlCenter` 占用 5000/7000；不要为了项目测试关闭系统功能，优先改测试端口或显式绑定地址。
+- `localhost` 可能先解析到 `::1`，但服务只监听 `127.0.0.1`；分别用 `curl -4` 和 `curl -6` 验证，不要只测一个地址。
+- macOS 15+ 首次访问局域网可能触发“本地网络”权限；CI、SSH 或无 GUI 会话可能无法弹窗。把拒绝记录为环境限制，不要误判成服务崩溃。
+- 查不到监听者时先检查权限和进程域，不要默认 `sudo`、`kill -9` 或关闭防火墙来“排除故障”。
+
 ## 12. 归档、扩展属性、资源叉与符号链接
 
 **现象：** 用普通 `zip`/`tar` 打包再解压后，签名、quarantine、可执行位、符号链接或扩展属性丢失；macOS 生成的 `__MACOSX`、`._*` 文件污染产物。
@@ -246,6 +275,11 @@ otool -L <binary-or-dylib>
 
 修改 dylib 后要重新签名；`DYLD_LIBRARY_PATH` 在受保护进程或 SIP 场景中可能被忽略。不要把“注入环境变量”当作跨版本兼容的长期方案。
 
+- universal2 wheel 可能同时包含两种架构；`platform.machine()` 只说明当前进程，不等于产物一定是单架构。
+- `node-gyp`、`sharp`、`canvas`、SQLite 等原生模块混架构时，删除缓存后在原生 arm64 终端重装，不要跨架构复制 `node_modules`。
+- JDK、JNI 库和容器基础镜像必须同架构；只替换 `JAVA_HOME` 而不重装 JNI 依赖，可能仍加载错误的 `.dylib`。
+- 用 `codesign -d --entitlements :-` 检查 JIT、调试器或 hardened runtime 相关 entitlement；不要通过关闭 SIP 解决。
+
 ## 14. Xcode、Command Line Tools 与 SDK
 
 **现象：** `xcode-select -p` 指向 CLT，但项目需要完整 Xcode；或者装了多个 Xcode，`xcodebuild` 使用了错误版本；CLT license 未接受，构建在 CI 中无提示失败。
@@ -259,6 +293,11 @@ sudo xcodebuild -license check
 
 记录 Xcode、SDK、CLT 和目标 `MACOSX_DEPLOYMENT_TARGET`。不要在未说明影响时执行 `sudo xcode-select -s` 或 `xcodebuild -runFirstLaunch`。Apple Silicon 上要显式检查目标架构和签名设置，不能只看“编译成功”。
 
+- `xcode-select -p` 指向 `/Library/Developer/CommandLineTools` 时，只能证明 CLT 存在，不能证明完整 Xcode 工程、Interface Builder、模拟器或签名流程通过。
+- 多个 Xcode 并存时，记录 `xcodebuild -version` 和实际开发者目录；不要只看 `xcode-select -p`。
+- `xcodebuild -license check` 是只读检查；审计任务不要执行 `sudo xcodebuild -license accept` 或其他会改变系统状态的命令。
+- `xcrun --show-sdk-path`、`xcodebuild -showsdks` 和 `MACOSX_DEPLOYMENT_TARGET` 要一起记录，避免“能编译”但 SDK/部署目标错误。
+
 ## 15. 性能与资源基线不要跨世代照搬
 
 M1 到 M6 的 CPU/GPU 核心数、统一内存带宽和 Neural Engine 规模差异很大。把 M1 上的固定线程数、连接池、并行测试 worker 数、Docker CPU 限制直接搬到 M5/M6，可能造成资源争抢、超时或假性能回归。
@@ -271,6 +310,15 @@ sysctl -n machdep.cpu.brand_string
 ```
 
 性能结论必须绑定芯片、内存、macOS、Xcode/SDK、负载和并发度。CI 只能证明功能和基本回归，不能替代 M6 或 M5 Ultra 的硬件性能测试。
+
+```bash
+sysctl -n hw.ncpu
+sysctl -n hw.memsize
+vm_stat
+system_profiler SPHardwareDataType
+```
+
+`powermetrics` 需要额外权限，不能默认可用；不要用一次 M1 的线程数、连接池或 Docker CPU 限制证明 M5/M6 也通过。
 
 ## 16. GitHub macOS runner 不是“最新 Mac”
 
@@ -304,6 +352,9 @@ SDK: 26.5
 - 用默认大小写不敏感 APFS 验证跨平台路径，未发现大小写冲突。
 - 用 `xattr -d` 去掉 quarantine 后判定“应用可运行”。
 - Docker 镜像能启动，就假设架构和宿主一致。
+- `lsof` 看不到端口，就断言服务没启动；没有排除 AirPlay 5000/7000、IPv6 `::1` 或权限限制。
+- 只有 CLT、没有完整 Xcode，却报告 iOS/macOS 工程构建或签名通过。
+- dylib 修改后没有重新签名，或把 `DYLD_LIBRARY_PATH` 被忽略当成代码 bug。
 - CI 在某一台 arm64 runner 上通过，就宣称所有 M 系列 Mac 或 macOS 27 都通过。
 
 ## 18. 来源

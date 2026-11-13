@@ -1,6 +1,6 @@
 # 真人试用说明 / Human Trial Guide
 
-本包是 `project-health-macos` **1.0.1 公开版**，仓库地址为 <https://github.com/Fallen-leaves089/project-health-macos>。可以分享给试用者；再分发时必须保留 `LICENSE`、`NOTICE`、`PROVENANCE.md` 和原仓库归属。
+本包是 `project-health-macos` **1.0.3 公开版**，仓库地址为 <https://github.com/Fallen-leaves089/project-health-macos>。可以分享给试用者；再分发时必须保留 `LICENSE`、`NOTICE`、`PROVENANCE.md` 和原仓库归属。
 
 许可为 Apache License 2.0，允许个人和商业使用；再分发时保留 `LICENSE`、`NOTICE`、`PROVENANCE.md` 和上游 Required Notice。发布包使用 OpenSSH Ed25519 签名，验证见 `SIGNING.md`。
 
