@@ -8,7 +8,7 @@
 [![Release](https://img.shields.io/github/v/release/Fallen-leaves089/project-health-macos?label=release)](https://github.com/Fallen-leaves089/project-health-macos/releases/latest)
 [![Verify](https://img.shields.io/github/actions/workflow/status/Fallen-leaves089/project-health-macos/verify.yml?branch=main&label=verify&logo=github)](https://github.com/Fallen-leaves089/project-health-macos/actions/workflows/verify.yml)
 [![Python](https://img.shields.io/badge/validation-Python%203.9%2B-blue?logo=python&logoColor=white)](#self-check)
-[![project-health-macos DOI](https://img.shields.io/badge/project-health-macos%20DOI-10.5281%2Fzenodo.24184442-blue)](https://doi.org/10.5281/zenodo.24184442)
+[![project-health-macos DOI](https://img.shields.io/badge/project--health--macos%20DOI-10.5281%2Fzenodo.24184442-blue)](https://doi.org/10.5281/zenodo.24184442)
 ![Platform](https://img.shields.io/badge/platform-macOS%20Apple%20Silicon-black?logo=apple&logoColor=white)
 
 **A macOS-only deep project health-check skill.** Extracted from the professional [project-health](https://github.com/Fallen-leaves089/project-health) workflow, keeping only the commands, architecture differences, permission boundaries, and hard-to-spot traps that matter on macOS.
