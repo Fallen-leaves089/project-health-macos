@@ -8,7 +8,7 @@
 [![Release](https://img.shields.io/github/v/release/Fallen-leaves089/project-health-macos?label=release)](https://github.com/Fallen-leaves089/project-health-macos/releases/latest)
 [![Verify](https://img.shields.io/github/actions/workflow/status/Fallen-leaves089/project-health-macos/verify.yml?branch=main&label=verify&logo=github)](https://github.com/Fallen-leaves089/project-health-macos/actions/workflows/verify.yml)
 [![Python](https://img.shields.io/badge/validation-Python%203.9%2B-blue?logo=python&logoColor=white)](#self-check)
-[![Software DOI](https://img.shields.io/badge/Software%20DOI-10.5281%2Fzenodo.24184442-blue)](https://doi.org/10.5281/zenodo.24184442)
+[![project-health-macos DOI](https://img.shields.io/badge/project-health-macos%20DOI-10.5281%2Fzenodo.24184442-blue)](https://doi.org/10.5281/zenodo.24184442)
 ![Platform](https://img.shields.io/badge/platform-macOS%20Apple%20Silicon-black?logo=apple&logoColor=white)
 
 **A macOS-only deep project health-check skill.** Extracted from the professional [project-health](https://github.com/Fallen-leaves089/project-health) workflow, keeping only the commands, architecture differences, permission boundaries, and hard-to-spot traps that matter on macOS.
@@ -202,7 +202,14 @@ The repository uses a protected `main` trunk. See [BRANCHING.md](BRANCHING.md) f
 
 ## Citation
 
-Author: [`fallen-leaves`](https://github.com/Fallen-leaves089); ORCID: [`0009-0005-8897-4831`](https://orcid.org/0009-0005-8897-4831). Software archive DOI: [10.5281/zenodo.24184442](https://doi.org/10.5281/zenodo.24184442). If this project helps your work, cite it using [`CITATION.cff`](CITATION.cff). The repository's **Cite this repository** menu can generate APA and BibTeX.
+### DOI classification
+
+| Project | Type | DOI |
+|---|---|---|
+| `project-health` | Software archive | [10.5281/zenodo.24184440](https://doi.org/10.5281/zenodo.24184440) |
+| `project-health-macos` | Software archive | [10.5281/zenodo.24184442](https://doi.org/10.5281/zenodo.24184442) |
+
+Author: [`fallen-leaves`](https://github.com/Fallen-leaves089); ORCID: [`0009-0005-8897-4831`](https://orcid.org/0009-0005-8897-4831). Software archive DOI (project-health-macos): [10.5281/zenodo.24184442](https://doi.org/10.5281/zenodo.24184442). If this project helps your work, cite it using [`CITATION.cff`](CITATION.cff). The repository's **Cite this repository** menu can generate APA and BibTeX.
 
 ## License and provenance
 
