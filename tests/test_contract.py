@@ -16,7 +16,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 FIXTURE_DIR = ROOT / "tests" / "fixtures" / "malicious-target"
 FIXTURE = FIXTURE_DIR / "malicious-agents.fixture"
-EXPECTED_VERSION = "1.0.3"
+EXPECTED_VERSION = "1.0.4"
+EXPECTED_RELEASE_DATE = "2026-11-18"
 EXPECTED_NAME = "project-health-macos"
 EXPECTED_LICENSE = "Apache-2.0"
 
@@ -188,9 +189,29 @@ class UntrustedTargetContractTests(unittest.TestCase):
         self.assertIn(f"- 当前版本：`{EXPECTED_VERSION}`", read_text("README.md"))
         self.assertIn(f"- Version: `{EXPECTED_VERSION}`", read_text("README.en.md"))
         self.assertIn(
-            f"## {EXPECTED_VERSION} - 2026-11-13",
+            f"## {EXPECTED_VERSION} - {EXPECTED_RELEASE_DATE}",
             read_text("CHANGELOG.md"),
         )
+
+    def test_validation_boundary_is_explicit(self) -> None:
+        readme = read_text("README.md")
+        for marker in (
+            "不调用真实 Agent",
+            "不等于 Agent 行为已验证",
+            "不进入默认 CI",
+            "不作为发布闸门",
+        ):
+            self.assertIn(marker, readme)
+        readme_en = read_text("README.en.md")
+        for marker in (
+            "do not call a real agent",
+            "does not mean agent behavior is validated",
+            "not part of default CI",
+            "not a release gate",
+        ):
+            self.assertIn(marker, readme_en)
+        for relative in ("SKILL.md", "SKILL.en.md"):
+            self.assertIn("uncovered scope" if relative.endswith(".en.md") else "未覆盖项", read_text(relative))
 
     def test_ci_is_macos_only_and_runs_contract_checks(self) -> None:
         workflow = read_text(".github/workflows/verify.yml")

@@ -1,7 +1,10 @@
 # Changelog
 
-## Unreleased
+## 1.0.4 - 2026-11-18
 
+- Clarified that package verification, contract tests, the macOS smoke test, and CI do not validate real agent behavior; real behavior evaluation is separate and is not a release gate.
+- Added the model, host, permission mode, date, evidence, and uncovered-scope record fields to the validation guidance.
+- Synced version metadata, READMEs, SKILL files, CITATION, trial guide, and contract tests.
 - Documented the single-trunk branch policy and added a pull-request checklist.
 
 ## 1.0.3 - 2026-11-13
