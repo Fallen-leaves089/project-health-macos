@@ -2,7 +2,7 @@
 name: project-health-macos
 description: Deep project audits and delivery acceptance for native Apple Silicon Macs (M1 and later): history-first review, standards/spec two-axis audit, real build/migration/container regressions, and an evidence-linked P0-P3 report. Use only on arm64 macOS without Rosetta translation; route everyday quick checks to project-health-lite first.
 metadata:
-  version: 1.0.3
+  version: 1.0.4
 license: Apache-2.0
 ---
 
@@ -166,6 +166,8 @@ Report template: `references/report-template.en.md`.
 ## Verification discipline (most important)
 
 **Every guard script must be tested with a positive and a negative case.** A guard that only reports green is not a guard.
+
+**Deterministic checks are not behavior validation.** A green package verifier, contract suite, macOS smoke test, or CI run proves only that the package and deterministic contracts are self-consistent. Without a real agent run, do not write "agent behavior is validated". Evaluate real behavior separately and record the model, host, permission mode, date, evidence, and uncovered scope.
 
 Criteria:
 

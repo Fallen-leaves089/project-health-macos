@@ -13,7 +13,7 @@
 
 **A macOS-only deep project health-check skill.** Extracted from the professional [project-health](https://github.com/Fallen-leaves089/project-health) workflow, keeping only the commands, architecture differences, permission boundaries, and hard-to-spot traps that matter on macOS.
 
-- Version: `1.0.3` ([changelog](CHANGELOG.md))
+- Version: `1.0.4` ([changelog](CHANGELOG.md))
 - Platform: macOS
 - Chips: Apple Silicon M1 and later only; Intel Macs and Rosetta terminals are rejected
 - Validation scope: CI observed both Apple M2 Pro (Virtual) and Apple M1 (Virtual) runners on macOS 26.7.2; M1-M6 `arm64` architecture compatibility is covered as platform fact, while M6, M5 Ultra, and macOS 27 are not presented as hardware-validated
@@ -136,9 +136,13 @@ The package verifier checks:
 - typical non-macOS commands or script entry points have not leaked back in;
 - the redaction scanner passes both positive and negative cases.
 
+### Validation boundary: deterministic checks are not agent behavior validation
+
+`scripts/verify_package.py`, the contract suite, the macOS smoke test, and default CI verify only the package structure, scripts, rules, and documentation contracts; they do not call a real agent. Passing them only shows that the package and deterministic contracts are self-consistent; it does not mean agent behavior is validated. Real behavior requires a separate evaluation that records the model, host, permission mode, date, result, evidence, and uncovered scope. Such results depend on model versions, system prompts, tools, and sampling; they are not part of default CI and are not a release gate.
+
 ### Optional: verify autonomous pitfall recording
 
-The default tests validate the recorder and rules without calling an external agent. To test real behavior:
+To test real behavior:
 
 ```bash
 python3 -B tests/agent_memory_eval.py --codex <codex> --require-scenario-match --min-passed 2

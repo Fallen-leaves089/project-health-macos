@@ -13,7 +13,7 @@
 
 **macOS 专用的深度项目体检 Skill。** 从 [project-health](https://github.com/Fallen-leaves089/project-health) 的专业版工作流拆出，只保留 macOS 环境需要的命令、架构差异、权限边界和高隐蔽度陷阱。
 
-- 当前版本：`1.0.3`（[更新记录](CHANGELOG.md)）
+- 当前版本：`1.0.4`（[更新记录](CHANGELOG.md)）
 - 适用平台：macOS
 - 芯片范围：仅 Apple Silicon M1 及后续世代；Intel Mac 和 Rosetta 终端不进入正式检查
 - 验证范围：CI 已观察到 macOS 26.7.2 上的 Apple M2 Pro (Virtual) 和 Apple M1 (Virtual) 两种 runner；M1–M6 的 `arm64` 架构兼容性按平台事实覆盖，M6、M5 Ultra 和 macOS 27 不作为已实机验证范围
@@ -136,9 +136,13 @@ python3 scripts/check_redaction.py --self-test
 - 是否残留典型非 macOS 命令或脚本入口；
 - 脱敏扫描器的正反例是否都能成立。
 
+### 验证边界：确定性检查不等于 Agent 行为验证
+
+`scripts/verify_package.py`、契约测试、macOS 冒烟和默认 CI 只验证包结构、脚本、规则和文档契约，不调用真实 Agent；全部通过只说明包与确定性契约自洽，不等于 Agent 行为已验证。真实行为需要单独评测，并记录模型、宿主、权限模式、日期、结果、证据和未覆盖项；这类结果依赖模型版本、系统提示、工具集和采样，不进入默认 CI，也不作为发布闸门。
+
 ### 可选：验证 Agent 是否会自主记录新坑
 
-默认测试只验证记录器和规则，不会调用外部 Agent。要验证真实行为，可运行：
+要验证真实行为，可运行：
 
 ```bash
 python3 -B tests/agent_memory_eval.py --codex <codex> --require-scenario-match --min-passed 2

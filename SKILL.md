@@ -2,7 +2,7 @@
 name: project-health-macos
 description: Apple Silicon 专用的深度项目审计与交付验收技能：在 M1 及后续芯片的 macOS 上先查项目历史，再做规范/规格双轴审查、真实构建/迁移/容器回归，最终输出带证据位置的 P0-P3 问题清单。仅在原生 arm64 macOS 环境使用；普通快速体检优先 project-health-lite。
 metadata:
-  version: 1.0.3
+  version: 1.0.4
 license: Apache-2.0
 ---
 
@@ -165,6 +165,8 @@ git diff <fixed-point>...HEAD --stat  # 三点，对比 merge-base
 ## 验证纪律（最重要）
 
 **每个守护类脚本都必须跑正反两例。** 只会报绿的守护等于没有守护。
+
+**确定性检查不等于行为验证。** 包校验、契约测试、macOS 冒烟和 CI 全绿只证明包与确定性契约自洽；未调用真实 Agent 时，不得写成“Agent 行为已验证”。真实行为另测并记录模型、宿主、权限模式、日期、证据和未覆盖项。
 
 判据：
 
