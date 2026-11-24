@@ -13,7 +13,7 @@
 
 **A macOS-only deep project health-check skill.** Extracted from the professional [project-health](https://github.com/Fallen-leaves089/project-health) workflow, keeping only the commands, architecture differences, permission boundaries, and hard-to-spot traps that matter on macOS.
 
-- Version: `1.0.4` ([changelog](CHANGELOG.md))
+- Version: `1.1.0` ([changelog](CHANGELOG.md))
 - Platform: macOS
 - Chips: Apple Silicon M1 and later only; Intel Macs and Rosetta terminals are rejected
 - Validation scope: CI observed both Apple M2 Pro (Virtual) and Apple M1 (Virtual) runners on macOS 26.7.2; M1-M6 `arm64` architecture compatibility is covered as platform fact, while M6, M5 Ultra, and macOS 27 are not presented as hardware-validated

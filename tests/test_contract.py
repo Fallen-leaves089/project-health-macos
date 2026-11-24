@@ -16,8 +16,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 FIXTURE_DIR = ROOT / "tests" / "fixtures" / "malicious-target"
 FIXTURE = FIXTURE_DIR / "malicious-agents.fixture"
-EXPECTED_VERSION = "1.0.4"
-EXPECTED_RELEASE_DATE = "2026-11-18"
+EXPECTED_VERSION = "1.1.0"
+EXPECTED_RELEASE_DATE = "2026-11-24"
 EXPECTED_NAME = "project-health-macos"
 EXPECTED_LICENSE = "Apache-2.0"
 
