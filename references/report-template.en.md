@@ -104,6 +104,50 @@ git diff <COMMIT>...HEAD --stat
 |---|---|---|---|---|
 | `YYYY-MM-DD` | P0-1 | ... | ... | `<sha>` |
 
+## Resident hidden-pitfall coverage
+
+### Baseline resident set (M-RES-01 through M-RES-08)
+
+| Tripwire | Status | Evidence |
+|---|---|---|
+| M-RES-01 false green / skipped tests | checked / not applicable / uncovered | `...` |
+| M-RES-02 swallowed exit code | checked / not applicable / uncovered | `...` |
+| M-RES-03 secrets/personal data in artifacts | checked / not applicable / uncovered | `...` |
+| M-RES-04 ownership supplied by the client | checked / not applicable / uncovered | `...` |
+| M-RES-05 backup/restore/rollback not exercised | checked / not applicable / uncovered | `...` |
+| M-RES-06 Rosetta treated as native | checked / not applicable / uncovered | `...` |
+| M-RES-07 Xcode/CLT and SDK mismatch | checked / not applicable / uncovered | `...` |
+| M-RES-08 Gatekeeper/signing/notarization failure | checked / not applicable / uncovered | `...` |
+
+### User-promoted resident set (M-RES-09)
+
+| URES ID | Source entry | Minimal user quote | Upgraded at | Scope | Revocation/downgrade condition | Current status |
+|---|---|---|---|---|---|---|
+| none | - | - | - | - | - | M-RES-09 not triggered |
+
+- M-RES-09 promotion control: not triggered / applied / not applicable / uncovered
+- Resident capacity: baseline 8 + user-promoted `N` = `M`; when `M > 12`, recommend reviewing downgrade candidates
+
+> All eight baseline rows, M-RES-09 control, and every user-promoted entry need a status. `uncovered` must never be reported as passed.
+
+## Structural experience harvest
+
+| Primary chapter | Deepest path | Chapter coverage | Branch result | Entry matched | Entry status | Injection | Evidence |
+|---|---|---|---|---|---|---|---|
+| A | `A/<slug>/...` | opened / no signal / not applicable / cross-chapter reference / unclassified | leaf match / ancestor match / explored with no match (report only) / insufficient granularity / conflict (group not injected) | none / `S-...` | none / `verified / pending verification / obsolete` | none / `detailed / brief / soft hint` | `...` |
+| B | ... | ... | ... | ... | ... | ... | `...` |
+| C | ... | ... | ... | ... | ... | ... | `...` |
+| D | ... | ... | ... | ... | ... | ... | `...` |
+| E | ... | ... | ... | ... | ... | ... | `...` |
+| F | ... | ... | ... | ... | ... | ... | `...` |
+
+> Keep one row for every A-F chapter. Sibling depth is a warning only.
+
+- Entries matched: none / `S-...` (primary `X`; primary branch `...`; related branches `...`)
+- Conflict group: none / `S-..., S-...`
+- Current-project verification: none / `evidence and result`
+- Added: none / `N` (`references/structural-experience.en.md` or `STRUCTURE.local.md`)
+
 ## Notes
 
 - Secrets, tokens, cookies, client names, real domains, and private IPs in this report have been redacted.
