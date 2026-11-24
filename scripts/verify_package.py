@@ -30,6 +30,7 @@ from typing import Dict, Iterable, List, Sequence, Tuple
 SCRIPT_PATH = Path(__file__).resolve()
 DEFAULT_ROOT = SCRIPT_PATH.parent.parent
 SCANNER = SCRIPT_PATH.parent / "check_redaction.py"
+STRUCTURE_RECORDER = SCRIPT_PATH.parent / "record_structure.py"
 
 TEXT_EXTENSIONS = {
     ".md",
@@ -103,12 +104,18 @@ REQUIRED_FILES = [
     "references/verification-playbook.en.md",
     "references/report-template.md",
     "references/report-template.en.md",
+    "references/structural-experience.md",
+    "references/structural-experience.en.md",
     "scripts/check_redaction.py",
     "scripts/verify_package.py",
     "scripts/record_pitfall.py",
+    "scripts/record_structure.py",
+    "scripts/structure-schema.json",
     "scripts/check_macos_env.sh",
     "scripts/smoke_macos_runtime.sh",
     "tests/test_contract.py",
+    "tests/test_record_structure.py",
+    "tests/test_structural_experience.py",
     "tests/test_record_pitfall.py",
     "tests/test_agent_memory_eval.py",
     "tests/agent_memory_eval.py",
@@ -130,6 +137,14 @@ LANGUAGE_LINKS = {
     "README.en.md": ("[中文](README.md)", "[English](README.en.md)"),
     "SKILL.md": ("[中文](SKILL.md)", "[English](SKILL.en.md)"),
     "SKILL.en.md": ("[中文](SKILL.md)", "[English](SKILL.en.md)"),
+    "references/structural-experience.md": (
+        "[中文](structural-experience.md)",
+        "[English](structural-experience.en.md)",
+    ),
+    "references/structural-experience.en.md": (
+        "[中文](structural-experience.md)",
+        "[English](structural-experience.en.md)",
+    ),
 }
 
 LINK_RE = re.compile(r"!?\[[^\]]*\]\(([^)]+)\)")
@@ -385,6 +400,42 @@ def _run_scanner(root: Path) -> Tuple[List[str], str]:
     return failures, package_scan.stdout.strip()
 
 
+def _check_structure_manuals(root: Path) -> List[str]:
+    failures: List[str] = []
+    if not STRUCTURE_RECORDER.is_file():
+        return [f"Missing structure recorder: {STRUCTURE_RECORDER.name}"]
+    for relative in (
+        "references/structural-experience.md",
+        "references/structural-experience.en.md",
+    ):
+        path = root / relative
+        if not path.is_file():
+            failures.append(f"Missing structure manual: {relative}")
+            continue
+        completed = subprocess.run(
+            [
+                sys.executable,
+                str(STRUCTURE_RECORDER),
+                "--check",
+                "--path",
+                str(path),
+                "--root",
+                str(root),
+            ],
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            check=False,
+        )
+        if completed.returncode != 0:
+            detail = (completed.stderr or completed.stdout).strip()
+            failures.append(
+                f"Structure manual validation failed for {relative}: {detail}"
+            )
+    return failures
+
+
 def parse_args(argv: Sequence[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -421,6 +472,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     failures.extend(_check_provenance(root))
     failures.extend(_check_language_links(root))
     failures.extend(_check_macos_scope(root))
+    failures.extend(_check_structure_manuals(root))
 
     scanner_failures, _ = _run_scanner(root)
     failures.extend(scanner_failures)

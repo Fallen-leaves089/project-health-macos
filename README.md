@@ -77,6 +77,8 @@ test -f "$HOME/.claude/skills/project-health-macos/SKILL.md"
 
 > **本地避坑记忆**：安装后，Agent 核实的新坑默认追加到 `PITFALLS.local.md`，首次使用时自动创建，后续任务开始时会先读回；`git pull --ff-only` 不会删除它。升级时不要手工清理该文件，覆盖安装前先备份。
 
+> **结构经验**：`references/structural-experience.md` 空白起步，按 A-F 索引和受控器 `scripts/record_structure.py --check/add` 使用。真实项目核实后才写入 `STRUCTURE.local.md`，没有经验保持空白。
+
 安装后先确认运行环境：
 
 ```bash

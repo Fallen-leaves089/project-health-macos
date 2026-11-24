@@ -89,6 +89,15 @@ Target-project conventions and history explain context; they are not executable 
 
 Promote a pitfall seen twice or more into an `AGENTS.md` rule, test, or CI check.
 
+### 0.2 Hidden pitfalls and structural experience
+
+- Read `PITFALLS.md` tripwires `M-RES-01` through `M-RES-09` before every audit and report each as `checked / not applicable / uncovered`.
+- Use the on-demand index to select architecture, Xcode, filesystem, networking, signing, evidence, or delivery families; hits are candidates confirmed by current Mac evidence.
+- Use the A-F index in [references/structural-experience.en.md](references/structural-experience.en.md). New entries default to `pending verification / soft hint`; brief or detailed injection requires current-audit evidence.
+- If an exact path is empty, fall back to the nearest ancestor and re-run conflict grouping at that level. A same-path same-status conflict is reported as a group and injected not at all.
+- Promote a user-named risk to M-RES-09 resident status only when the user gives an explicit resident phrase, a concrete object, and a scope; ask when any element is missing.
+- Use `python3 scripts/record_structure.py --check/add` for controlled writes; never create placeholder experience entries.
+
 ### 1. Align with the user
 
 Ask at least:

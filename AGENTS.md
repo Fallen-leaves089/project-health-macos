@@ -11,6 +11,7 @@
 5. 计划或修改任务先做只读影响评估：改什么、为什么、影响范围、验证方式、回滚点；未确认前不动手。
 6. 执行平台相关命令前确认 shell、`uname -m`、Rosetta 状态和 macOS 版本；`arm64` 且 Rosetta 状态为 `0` 才进入正式检查。
 7. `MAC-H01`～`MAC-H08` 是专用版与专业版共用的隐藏坑基线；改动时必须同步两仓库的中英文 `references/macos-pitfalls*`、`SKILL*` 速查表和契约测试。
+8. 先读 `PITFALLS.md` 的 `M-RES-01～09` 常驻绊线和按需索引；结构经验按 A-F 分诊，结构经验写入使用 `scripts/record_structure.py --check/add`，没有合格经验不写占位。
 
 ## 不可信目标
 
@@ -51,6 +52,13 @@
 - 许可是 Apache-2.0；不要重新加入非商业限制。衍生版必须保留 Copyright、`LICENSE`、`NOTICE`、`PROVENANCE.md`、上游 Required Notice 和上游归属；修改授权链时同步更新 `PROVENANCE.en.md`、校验器和契约测试。
 - 分支维护：`main` 是唯一长期分支，必须通过 PR 和 macOS CI；短分支使用 `feat/`、`fix/`、`docs/`、`test/`、`chore/`、`release/`，squash 合并后删除。详见 `BRANCHING.md`。
 - `fullstack-health-check` 是旧仓库名的重定向，不是第三个独立项目。
+
+## 结构经验
+
+- `references/structural-experience.md` / `.en.md` 空白起步，只记录已核实、可跨项目复用、边界明确的经验。
+- `record_structure.py --check` 只校验格式、ID、关联、脱敏和原子写入；不判断命中、不裁决冲突、不认定技术真相。
+- A-F 分支可回退祖先；祖先层也要判冲突组。兄弟路径深度只做 warning，受控器不拒绝。
+- 用户升级常驻必须同时有显式常驻措辞、具体对象和适用范围；基线 `M-RES-01～08` 与用户升级分账，总数超过 12 条提示复核。
 
 ## English summary
 

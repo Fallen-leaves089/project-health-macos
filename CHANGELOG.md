@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- 增加 macOS 专用常驻隐藏坑绊线、按需索引、空白结构经验手册、扁平 schema 和仅 macOS 的受控写入器；同步报告覆盖、核验脚本和契约测试。
+
 ## 1.0.4 - 2026-11-18
 
 - Clarified that package verification, contract tests, the macOS smoke test, and CI do not validate real agent behavior; real behavior evaluation is separate and is not a release gate.
