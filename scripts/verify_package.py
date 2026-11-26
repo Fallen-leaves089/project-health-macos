@@ -77,7 +77,6 @@ REQUIRED_FILES = [
     "SKILL.md",
     "SKILL.en.md",
     "AGENTS.md",
-    "AGENT_CONTEXT.md",
     "PITFALLS.md",
     "README.md",
     "README.en.md",
