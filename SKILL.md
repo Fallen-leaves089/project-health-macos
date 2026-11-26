@@ -2,7 +2,7 @@
 name: project-health-macos
 description: Apple Silicon 专用的深度项目审计与交付验收技能：在 M1 及后续芯片的 macOS 上先查项目历史，再做规范/规格双轴审查、真实构建/迁移/容器回归，最终输出带证据位置的 P0-P3 问题清单。仅在原生 arm64 macOS 环境使用；普通快速体检优先 project-health-lite。
 metadata:
-  version: 1.1.0
+  version: 1.1.1
 license: Apache-2.0
 ---
 

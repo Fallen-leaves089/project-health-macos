@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.1.1 - 2026-11-26
+
+### 中文
+
+- 修正结构经验写入范围：Git 克隆安装到 `skills/project-health-macos` 时改为写 `STRUCTURE.local.md`，不再修改随包维护的中文结构手册。
+- 修复英文结构经验写入和仓库英文手册选择；本地条目语言与章节标题语言解耦，并允许全新安装的默认检查报告“尚无本地手册”。
+- 收紧状态规则：`已过时` 条目只允许软提示，禁止使用详细注入。
+- 扩展 macOS 脱敏扫描：新增 `Authorization: Bearer`、长值 Cookie 头和 JWT 的正反例。
+- 更新 `1.1.1` 版本、引文和试用说明；GitHub CI 结果需在推送后补录。
+
+### English
+
+- Fix structural-experience write scope: Git clones installed under `skills/project-health-macos` now write `STRUCTURE.local.md` instead of modifying the maintained Chinese structural manual.
+- Fix English structural writes and selection of the English repository manual; local entry language is decoupled from chapter-heading language, and a fresh-install default check can report that no local manual exists yet.
+- Tighten status rules so `obsolete` entries may only use soft hints and cannot use detailed injection.
+- Extend the macOS redaction scanner with positive and negative cases for `Authorization: Bearer`, long Cookie-header values, and JWTs.
+- Update the `1.1.1` version, citation, and trial guide. GitHub CI evidence must be added after pushing.
+
 ## 1.1.0 - 2026-11-24
 
 - 增加 macOS 专用常驻隐藏坑绊线、按需索引、空白结构经验手册、扁平 schema 和仅 macOS 的受控写入器；同步报告覆盖、核验脚本和契约测试。
