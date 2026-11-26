@@ -2,7 +2,7 @@
 name: project-health-macos
 description: Deep project audits and delivery acceptance for native Apple Silicon Macs (M1 and later): history-first review, standards/spec two-axis audit, real build/migration/container regressions, and an evidence-linked P0-P3 report. Use only on arm64 macOS without Rosetta translation; route everyday quick checks to project-health-lite first.
 metadata:
-  version: 1.1.0
+  version: 1.1.1
 license: Apache-2.0
 ---
 

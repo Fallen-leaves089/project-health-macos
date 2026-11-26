@@ -16,8 +16,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 FIXTURE_DIR = ROOT / "tests" / "fixtures" / "malicious-target"
 FIXTURE = FIXTURE_DIR / "malicious-agents.fixture"
-EXPECTED_VERSION = "1.1.0"
-EXPECTED_RELEASE_DATE = "2026-11-24"
+EXPECTED_VERSION = "1.1.1"
+EXPECTED_RELEASE_DATE = "2026-11-26"
 EXPECTED_NAME = "project-health-macos"
 EXPECTED_LICENSE = "Apache-2.0"
 
@@ -201,6 +201,41 @@ class UntrustedTargetContractTests(unittest.TestCase):
             )
             clean_output = clean_result.stdout + clean_result.stderr
             self.assertEqual(clean_result.returncode, 0, msg=clean_output)
+
+    def test_redaction_scanner_detects_token_headers_and_jwt(self) -> None:
+        scanner = ROOT / "scripts/check_redaction.py"
+        sample = "abcdefghijklmnopqrstuvwxyz"
+        with tempfile.TemporaryDirectory(prefix="project-health-macos-redaction-") as temp_dir:
+            root = Path(temp_dir)
+            fixtures = {
+                "auth-header.txt": "Authorization: Bearer " + sample + "\n",
+                "cookie-header.txt": "Cookie: sessionid=" + sample + "\n",
+                "jwt-token.txt": (
+                    "eyJhbGciOiJIUzI1NiJ9."
+                    + sample
+                    + "."
+                    + sample
+                    + "\n"
+                ),
+            }
+            for name, content in fixtures.items():
+                (root / name).write_text(content, encoding="utf-8")
+
+            result = subprocess.run(
+                [sys.executable, "-B", str(scanner), "--path", str(root)],
+                cwd=ROOT,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            output = result.stdout + result.stderr
+            self.assertEqual(result.returncode, 1, msg=output)
+            for name in fixtures:
+                with self.subTest(name=name):
+                    self.assertIn(name, output)
+            self.assertIn("Authorization bearer token", output)
+            self.assertIn("Cookie header", output)
+            self.assertIn("JWT", output)
 
     def test_package_verifier_rejects_non_macos_artifacts(self) -> None:
         with tempfile.TemporaryDirectory(prefix="project-health-macos-verify-") as temp_dir:
