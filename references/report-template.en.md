@@ -147,6 +147,7 @@ git diff <COMMIT>...HEAD --stat
 - Conflict group: none / `S-..., S-...`
 - Current-project verification: none / `evidence and result`
 - Added: none / `N` (`references/structural-experience.en.md` or `STRUCTURE.local.md`)
+- Recording action: automatically written / no additions / write failed (`reason and pending content`)
 
 ## Notes
 

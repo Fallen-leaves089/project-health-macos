@@ -103,6 +103,7 @@ Promote a pitfall seen twice or more into an `AGENTS.md` rule, test, or CI check
 - If an exact path is empty, fall back to the nearest ancestor and re-run conflict grouping at that level. A same-path same-status conflict is reported as a group and injected not at all.
 - Promote a user-named risk to M-RES-09 resident status only when the user gives an explicit resident phrase, a concrete object, and a scope; ask when any element is missing.
 - Use `python3 scripts/record_structure.py --check/add` for controlled writes; never create placeholder experience entries.
+- **Automatic end-of-task recording**: before the final report, run the structural-experience harvest. If a verified, reusable mechanism with explicit boundaries exists, call `record_structure.py --add` immediately without waiting for the user; if none qualifies, state `Structural experience: no additions`. State the local path before first creation. If writing fails, preserve the pending content and report the failure without aborting the audit.
 
 ### 1. Align with the user
 

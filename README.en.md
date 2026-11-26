@@ -77,7 +77,7 @@ Install the whole directory, not only `SKILL.md`. `AGENTS.md`, `PITFALLS.md`, `P
 
 > **Local pitfall memory**: after installation, verified new pitfalls are appended to `PITFALLS.local.md`. It is created on first use, read back at the start of later tasks, and is not removed by `git pull --ff-only`. Do not clear it during upgrades; back it up before a replacement install.
 
-> **Structural experience**: `references/structural-experience.en.md` starts blank and uses the A-F index plus `scripts/record_structure.py --check/add`. Verified lessons may be written to `STRUCTURE.local.md`; keep it blank when no qualifying lesson exists.
+> **Structural experience**: `references/structural-experience.en.md` starts blank and uses the A-F index plus `scripts/record_structure.py --check/add`. Verified lessons may be written to `STRUCTURE.local.md`; keep it blank when no qualifying lesson exists. Before the final report, the agent must automatically harvest and write qualifying entries, or report `Structural experience: no additions`.
 
 Check the runtime environment after installation:
 
