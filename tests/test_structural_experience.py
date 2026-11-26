@@ -23,6 +23,7 @@ class StructuralExperienceContractTests(unittest.TestCase):
         for content in (chinese, english):
             self.assertIn("schema-version: 1", content)
             self.assertIn("no fixed depth limit" if content is english else "不设固定层数", content)
+            self.assertIn("Automatic harvest" if content is english else "自动回收", content)
         for chapter in SCHEMA["chapter_ids"]:
             self.assertIn(f"### {chapter}.", chinese)
             self.assertIn(f"### {chapter}.", english)
@@ -31,7 +32,9 @@ class StructuralExperienceContractTests(unittest.TestCase):
         agents = read_text("AGENTS.md")
         for phrase in ("M-RES-01～09", "A-F", "record_structure.py", "祖先"):
             self.assertIn(phrase, skill)
+        self.assertIn("任务收尾自动记录", skill)
         self.assertIn("结构经验", agents)
+        self.assertIn("自主记录门禁", agents)
         self.assertIn("M-RES-01～08", agents)
         self.assertIn("总数超过 12", agents)
 
@@ -51,6 +54,7 @@ class StructuralExperienceContractTests(unittest.TestCase):
             content = read_text(relative)
             self.assertIn(resident, content)
             self.assertIn(structure, content)
+            self.assertIn("Recording action" if relative.endswith(".en.md") else "记录动作", content)
             for chapter in ("A", "B", "C", "D", "E", "F"):
                 self.assertIn(f"| {chapter} |", content)
 
