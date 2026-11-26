@@ -21,7 +21,6 @@ from __future__ import annotations
 
 import argparse
 import datetime as _datetime
-import os
 import re
 import sys
 from dataclasses import dataclass
@@ -31,6 +30,9 @@ from typing import List, Optional, Sequence, Tuple
 
 SCRIPT_PATH = Path(__file__).resolve()
 DEFAULT_ROOT = SCRIPT_PATH.parent.parent
+sys.path.insert(0, str(SCRIPT_PATH.parent))
+import skill_runtime  # noqa: E402
+
 LOCAL_NAME = "PITFALLS.local.md"
 REPO_NAME = "PITFALLS.md"
 TAG_LIMIT = 40
@@ -206,26 +208,7 @@ def _memory_path(root: Path, scope: str) -> Path:
         raise ValueError(f"root is not a directory: {root}")
     if not any((root / name).is_file() for name in ("SKILL.md", "AGENTS.md", REPO_NAME)):
         raise ValueError("root does not look like a project-health skill directory")
-
-    if scope == "auto":
-        if (root / LOCAL_NAME).is_file():
-            scope = "local"
-        elif root.parent.name.casefold() == "skills":
-            scope = "local"
-        elif (root / ".git").exists():
-            scope = "repo"
-        else:
-            scope = "local"
-    if scope not in {"repo", "local"}:
-        raise ValueError("scope must be auto, repo, or local")
-
-    path = root / (LOCAL_NAME if scope == "local" else REPO_NAME)
-    resolved = path.resolve(strict=False)
-    if resolved.parent != root:
-        raise ValueError("refusing to write outside the skill root")
-    if scope == "repo" and not path.is_file():
-        raise ValueError(f"repository memory does not exist: {path}")
-    return path
+    return skill_runtime.resolve_memory_path(root, scope, LOCAL_NAME, REPO_NAME)
 
 
 def _normalise_for_compare(value: str) -> str:
@@ -251,34 +234,18 @@ def _is_duplicate(existing: str, line: str) -> bool:
 
 
 def _read_existing(path: Path) -> str:
-    if not path.exists():
-        return ""
-    data = path.read_bytes()
-    if data.startswith(b"\xef\xbb\xbf"):
-        raise ValueError(f"refusing to append to a UTF-8 BOM file: {path}")
-    try:
-        return data.decode("utf-8")
-    except UnicodeDecodeError as exc:
-        raise ValueError(f"memory file is not valid UTF-8: {path}") from exc
+    return skill_runtime.read_existing_utf8(
+        path,
+        "refusing to append to a UTF-8 BOM file",
+    )
 
 
 def _create_local(path: Path) -> None:
-    try:
-        with path.open("x", encoding="utf-8", newline="\n") as handle:
-            handle.write(LOCAL_HEADER)
-            handle.flush()
-            os.fsync(handle.fileno())
-    except FileExistsError:
-        return
+    skill_runtime.create_text_exclusive(path, LOCAL_HEADER)
 
 
 def _append_line(path: Path, existing: str, line: str) -> None:
-    with path.open("a", encoding="utf-8", newline="\n") as handle:
-        if existing and not existing.endswith("\n"):
-            handle.write("\n")
-        handle.write(line + "\n")
-        handle.flush()
-        os.fsync(handle.fileno())
+    skill_runtime.append_text(path, existing, line + "\n")
 
 
 def record(
